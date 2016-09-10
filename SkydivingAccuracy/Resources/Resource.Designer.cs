@@ -190,133 +190,151 @@ namespace SkydivingAccuracy
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int common_full_open_on_phone = 2130837504;
+			public const int action_other = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int common_google_signin_btn_icon_dark = 2130837505;
+			public const int action_search = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int common_google_signin_btn_icon_dark_disabled = 2130837506;
+			public const int common_full_open_on_phone = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int common_google_signin_btn_icon_dark_focused = 2130837507;
+			public const int common_google_signin_btn_icon_dark = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int common_google_signin_btn_icon_dark_normal = 2130837508;
+			public const int common_google_signin_btn_icon_dark_disabled = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int common_google_signin_btn_icon_dark_pressed = 2130837509;
+			public const int common_google_signin_btn_icon_dark_focused = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public const int common_google_signin_btn_icon_light = 2130837510;
+			public const int common_google_signin_btn_icon_dark_normal = 2130837510;
 			
 			// aapt resource value: 0x7f020007
-			public const int common_google_signin_btn_icon_light_disabled = 2130837511;
+			public const int common_google_signin_btn_icon_dark_pressed = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public const int common_google_signin_btn_icon_light_focused = 2130837512;
+			public const int common_google_signin_btn_icon_light = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public const int common_google_signin_btn_icon_light_normal = 2130837513;
+			public const int common_google_signin_btn_icon_light_disabled = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public const int common_google_signin_btn_icon_light_pressed = 2130837514;
+			public const int common_google_signin_btn_icon_light_focused = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public const int common_google_signin_btn_text_dark = 2130837515;
+			public const int common_google_signin_btn_icon_light_normal = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public const int common_google_signin_btn_text_dark_disabled = 2130837516;
+			public const int common_google_signin_btn_icon_light_pressed = 2130837516;
 			
 			// aapt resource value: 0x7f02000d
-			public const int common_google_signin_btn_text_dark_focused = 2130837517;
+			public const int common_google_signin_btn_text_dark = 2130837517;
 			
 			// aapt resource value: 0x7f02000e
-			public const int common_google_signin_btn_text_dark_normal = 2130837518;
+			public const int common_google_signin_btn_text_dark_disabled = 2130837518;
 			
 			// aapt resource value: 0x7f02000f
-			public const int common_google_signin_btn_text_dark_pressed = 2130837519;
+			public const int common_google_signin_btn_text_dark_focused = 2130837519;
 			
 			// aapt resource value: 0x7f020010
-			public const int common_google_signin_btn_text_light = 2130837520;
+			public const int common_google_signin_btn_text_dark_normal = 2130837520;
 			
 			// aapt resource value: 0x7f020011
-			public const int common_google_signin_btn_text_light_disabled = 2130837521;
+			public const int common_google_signin_btn_text_dark_pressed = 2130837521;
 			
 			// aapt resource value: 0x7f020012
-			public const int common_google_signin_btn_text_light_focused = 2130837522;
+			public const int common_google_signin_btn_text_light = 2130837522;
 			
 			// aapt resource value: 0x7f020013
-			public const int common_google_signin_btn_text_light_normal = 2130837523;
+			public const int common_google_signin_btn_text_light_disabled = 2130837523;
 			
 			// aapt resource value: 0x7f020014
-			public const int common_google_signin_btn_text_light_pressed = 2130837524;
+			public const int common_google_signin_btn_text_light_focused = 2130837524;
 			
 			// aapt resource value: 0x7f020015
-			public const int common_ic_googleplayservices = 2130837525;
+			public const int common_google_signin_btn_text_light_normal = 2130837525;
 			
 			// aapt resource value: 0x7f020016
-			public const int common_plus_signin_btn_icon_dark = 2130837526;
+			public const int common_google_signin_btn_text_light_pressed = 2130837526;
 			
 			// aapt resource value: 0x7f020017
-			public const int common_plus_signin_btn_icon_dark_disabled = 2130837527;
+			public const int common_ic_googleplayservices = 2130837527;
 			
 			// aapt resource value: 0x7f020018
-			public const int common_plus_signin_btn_icon_dark_focused = 2130837528;
+			public const int common_plus_signin_btn_icon_dark = 2130837528;
 			
 			// aapt resource value: 0x7f020019
-			public const int common_plus_signin_btn_icon_dark_normal = 2130837529;
+			public const int common_plus_signin_btn_icon_dark_disabled = 2130837529;
 			
 			// aapt resource value: 0x7f02001a
-			public const int common_plus_signin_btn_icon_dark_pressed = 2130837530;
+			public const int common_plus_signin_btn_icon_dark_focused = 2130837530;
 			
 			// aapt resource value: 0x7f02001b
-			public const int common_plus_signin_btn_icon_light = 2130837531;
+			public const int common_plus_signin_btn_icon_dark_normal = 2130837531;
 			
 			// aapt resource value: 0x7f02001c
-			public const int common_plus_signin_btn_icon_light_disabled = 2130837532;
+			public const int common_plus_signin_btn_icon_dark_pressed = 2130837532;
 			
 			// aapt resource value: 0x7f02001d
-			public const int common_plus_signin_btn_icon_light_focused = 2130837533;
+			public const int common_plus_signin_btn_icon_light = 2130837533;
 			
 			// aapt resource value: 0x7f02001e
-			public const int common_plus_signin_btn_icon_light_normal = 2130837534;
+			public const int common_plus_signin_btn_icon_light_disabled = 2130837534;
 			
 			// aapt resource value: 0x7f02001f
-			public const int common_plus_signin_btn_icon_light_pressed = 2130837535;
+			public const int common_plus_signin_btn_icon_light_focused = 2130837535;
 			
 			// aapt resource value: 0x7f020020
-			public const int common_plus_signin_btn_text_dark = 2130837536;
+			public const int common_plus_signin_btn_icon_light_normal = 2130837536;
 			
 			// aapt resource value: 0x7f020021
-			public const int common_plus_signin_btn_text_dark_disabled = 2130837537;
+			public const int common_plus_signin_btn_icon_light_pressed = 2130837537;
 			
 			// aapt resource value: 0x7f020022
-			public const int common_plus_signin_btn_text_dark_focused = 2130837538;
+			public const int common_plus_signin_btn_text_dark = 2130837538;
 			
 			// aapt resource value: 0x7f020023
-			public const int common_plus_signin_btn_text_dark_normal = 2130837539;
+			public const int common_plus_signin_btn_text_dark_disabled = 2130837539;
 			
 			// aapt resource value: 0x7f020024
-			public const int common_plus_signin_btn_text_dark_pressed = 2130837540;
+			public const int common_plus_signin_btn_text_dark_focused = 2130837540;
 			
 			// aapt resource value: 0x7f020025
-			public const int common_plus_signin_btn_text_light = 2130837541;
+			public const int common_plus_signin_btn_text_dark_normal = 2130837541;
 			
 			// aapt resource value: 0x7f020026
-			public const int common_plus_signin_btn_text_light_disabled = 2130837542;
+			public const int common_plus_signin_btn_text_dark_pressed = 2130837542;
 			
 			// aapt resource value: 0x7f020027
-			public const int common_plus_signin_btn_text_light_focused = 2130837543;
+			public const int common_plus_signin_btn_text_light = 2130837543;
 			
 			// aapt resource value: 0x7f020028
-			public const int common_plus_signin_btn_text_light_normal = 2130837544;
+			public const int common_plus_signin_btn_text_light_disabled = 2130837544;
 			
 			// aapt resource value: 0x7f020029
-			public const int common_plus_signin_btn_text_light_pressed = 2130837545;
+			public const int common_plus_signin_btn_text_light_focused = 2130837545;
 			
 			// aapt resource value: 0x7f02002a
-			public const int Icon = 2130837546;
+			public const int common_plus_signin_btn_text_light_normal = 2130837546;
+			
+			// aapt resource value: 0x7f02002b
+			public const int common_plus_signin_btn_text_light_pressed = 2130837547;
+			
+			// aapt resource value: 0x7f02002c
+			public const int drawer_shadow_dark = 2130837548;
+			
+			// aapt resource value: 0x7f02002d
+			public const int drawer_shadow_light = 2130837549;
+			
+			// aapt resource value: 0x7f02002e
+			public const int ic_drawer_dark = 2130837550;
+			
+			// aapt resource value: 0x7f02002f
+			public const int ic_drawer_light = 2130837551;
+			
+			// aapt resource value: 0x7f020030
+			public const int Icon = 2130837552;
 			
 			static Drawable()
 			{
@@ -331,47 +349,59 @@ namespace SkydivingAccuracy
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f070005
-			public const int adjust_height = 2131165189;
+			// aapt resource value: 0x7f080011
+			public const int action_slidingpane = 2131230737;
 			
-			// aapt resource value: 0x7f070006
-			public const int adjust_width = 2131165190;
+			// aapt resource value: 0x7f080005
+			public const int adjust_height = 2131230725;
 			
-			// aapt resource value: 0x7f07000a
-			public const int auto = 2131165194;
+			// aapt resource value: 0x7f080006
+			public const int adjust_width = 2131230726;
 			
-			// aapt resource value: 0x7f07000b
-			public const int dark = 2131165195;
+			// aapt resource value: 0x7f08000a
+			public const int auto = 2131230730;
 			
-			// aapt resource value: 0x7f070000
-			public const int hybrid = 2131165184;
+			// aapt resource value: 0x7f08000e
+			public const int content_frame = 2131230734;
 			
-			// aapt resource value: 0x7f070007
-			public const int icon_only = 2131165191;
+			// aapt resource value: 0x7f08000b
+			public const int dark = 2131230731;
 			
-			// aapt resource value: 0x7f07000c
-			public const int light = 2131165196;
+			// aapt resource value: 0x7f08000d
+			public const int drawer_layout = 2131230733;
 			
-			// aapt resource value: 0x7f07000d
-			public const int map = 2131165197;
+			// aapt resource value: 0x7f080000
+			public const int hybrid = 2131230720;
 			
-			// aapt resource value: 0x7f070001
-			public const int none = 2131165185;
+			// aapt resource value: 0x7f080007
+			public const int icon_only = 2131230727;
 			
-			// aapt resource value: 0x7f070002
-			public const int normal = 2131165186;
+			// aapt resource value: 0x7f08000f
+			public const int left_drawer = 2131230735;
 			
-			// aapt resource value: 0x7f070003
-			public const int satellite = 2131165187;
+			// aapt resource value: 0x7f08000c
+			public const int light = 2131230732;
 			
-			// aapt resource value: 0x7f070008
-			public const int standard = 2131165192;
+			// aapt resource value: 0x7f080010
+			public const int mapControl = 2131230736;
 			
-			// aapt resource value: 0x7f070004
-			public const int terrain = 2131165188;
+			// aapt resource value: 0x7f080001
+			public const int none = 2131230721;
 			
-			// aapt resource value: 0x7f070009
-			public const int wide = 2131165193;
+			// aapt resource value: 0x7f080002
+			public const int normal = 2131230722;
+			
+			// aapt resource value: 0x7f080003
+			public const int satellite = 2131230723;
+			
+			// aapt resource value: 0x7f080008
+			public const int standard = 2131230728;
+			
+			// aapt resource value: 0x7f080004
+			public const int terrain = 2131230724;
+			
+			// aapt resource value: 0x7f080009
+			public const int wide = 2131230729;
 			
 			static Id()
 			{
@@ -403,7 +433,13 @@ namespace SkydivingAccuracy
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Main = 2130903040;
+			public const int DrawerListItem = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int Main = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int MapView = 2130903042;
 			
 			static Layout()
 			{
@@ -415,14 +451,36 @@ namespace SkydivingAccuracy
 			}
 		}
 		
+		public partial class Menu
+		{
+			
+			// aapt resource value: 0x7f070000
+			public const int mainMenu = 2131165184;
+			
+			static Menu()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Menu()
+			{
+			}
+		}
+		
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f040022
+			public const int ApplicationName = 2130968610;
+			
 			// aapt resource value: 0x7f040020
-			public const int ApplicationName = 2130968608;
+			public const int DrawerClose = 2130968608;
 			
 			// aapt resource value: 0x7f04001f
-			public const int Hello = 2130968607;
+			public const int DrawerOpen = 2130968607;
+			
+			// aapt resource value: 0x7f040021
+			public const int Hello = 2130968609;
 			
 			// aapt resource value: 0x7f040001
 			public const int auth_google_play_services_client_facebook_display_name = 2130968577;
