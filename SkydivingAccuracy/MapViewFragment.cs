@@ -2,24 +2,30 @@ using Android.App;
 using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Android.OS;
+using Android.Support.V4.Widget;
 using Android.Views;
 
 namespace SkydivingAccuracy
 {
     public class MapViewFragment : Fragment
     {
-        public override View OnCreateView(LayoutInflater p0, ViewGroup p1, Bundle p2)
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            var mapView = p0.Inflate(Resource.Layout.MapView, p1, false);
+            var mapViewLayout = inflater.Inflate(Resource.Layout.MapView, container, false);
 
-            MapFragment mapFragment = (MapFragment)FragmentManager.FindFragmentById(Resource.Id.mapControl);
+            MapView mapFragment = mapViewLayout.FindViewById<MapView>(Resource.Id.mapControl);
+            mapFragment.OnCreate(savedInstanceState);
+            mapFragment.OnResume();
+
+            MapsInitializer.Initialize(Activity.ApplicationContext);
+
             GoogleMap map = mapFragment.Map;
             if (map != null)
             {
                 InitializeMap(map);
             }
 
-            return mapView;
+            return mapViewLayout;
         }
 
         private static void InitializeMap(GoogleMap map)
@@ -29,7 +35,7 @@ namespace SkydivingAccuracy
             LatLng location = new LatLng(44.237340, -79.640241);
             CameraPosition.Builder builder = CameraPosition.InvokeBuilder();
             builder.Target(location);
-            builder.Zoom(18);
+            builder.Zoom(16);
             CameraPosition cameraPosition = builder.Build();
             CameraUpdate cameraUpdate = CameraUpdateFactory.NewCameraPosition(cameraPosition);
             map.MoveCamera(cameraUpdate);

@@ -12,19 +12,25 @@ namespace SkydivingAccuracy
     [Activity(Label = "Skydiving Accuracy Aid", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
+        private MapViewFragment _mapViewFragment;
+        private ForecastViewFragment _forecastViewFragment;
+
         private DrawerLayout _drawer;
         private ActionBarDrawerToggleImplementation _drawerToggle;
         private ListView _drawerList;
 
         private string _drawerTitle;
         private string _title;
-        private string[] _menuItems = { "Map", "Weather" };
+        private string[] _menuItems = { "Landing Map", "Weather" };
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.Main);
+
+            _mapViewFragment = new MapViewFragment();
+            _forecastViewFragment = new ForecastViewFragment();
 
             _title = _drawerTitle = Title;
             _drawer = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
@@ -64,7 +70,7 @@ namespace SkydivingAccuracy
 
         private void SelectItem(int position)
         {
-            var fragment = new MapViewFragment();
+            Fragment fragment = (position == 0) ? (Fragment)_mapViewFragment : _forecastViewFragment;
             
             FragmentManager.BeginTransaction()
                 .Replace(Resource.Id.content_frame, fragment)
