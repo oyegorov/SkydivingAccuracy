@@ -349,8 +349,8 @@ namespace SkydivingAccuracy
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f080011
-			public const int action_slidingpane = 2131230737;
+			// aapt resource value: 0x7f080023
+			public const int action_slidingpane = 2131230755;
 			
 			// aapt resource value: 0x7f080005
 			public const int adjust_height = 2131230725;
@@ -361,14 +361,38 @@ namespace SkydivingAccuracy
 			// aapt resource value: 0x7f08000a
 			public const int auto = 2131230730;
 			
-			// aapt resource value: 0x7f08000e
-			public const int content_frame = 2131230734;
+			// aapt resource value: 0x7f080017
+			public const int az12000 = 2131230743;
+			
+			// aapt resource value: 0x7f080018
+			public const int az18000 = 2131230744;
+			
+			// aapt resource value: 0x7f080014
+			public const int az3000 = 2131230740;
+			
+			// aapt resource value: 0x7f080015
+			public const int az6000 = 2131230741;
+			
+			// aapt resource value: 0x7f080016
+			public const int az9000 = 2131230742;
+			
+			// aapt resource value: 0x7f080020
+			public const int content_frame = 2131230752;
 			
 			// aapt resource value: 0x7f08000b
 			public const int dark = 2131230731;
 			
+			// aapt resource value: 0x7f08001f
+			public const int drawer_layout = 2131230751;
+			
+			// aapt resource value: 0x7f08000e
+			public const int forUse = 2131230734;
+			
 			// aapt resource value: 0x7f08000d
-			public const int drawer_layout = 2131230733;
+			public const int forecastDescription = 2131230733;
+			
+			// aapt resource value: 0x7f08001e
+			public const int forecastListView = 2131230750;
 			
 			// aapt resource value: 0x7f080000
 			public const int hybrid = 2131230720;
@@ -376,14 +400,14 @@ namespace SkydivingAccuracy
 			// aapt resource value: 0x7f080007
 			public const int icon_only = 2131230727;
 			
-			// aapt resource value: 0x7f08000f
-			public const int left_drawer = 2131230735;
+			// aapt resource value: 0x7f080021
+			public const int left_drawer = 2131230753;
 			
 			// aapt resource value: 0x7f08000c
 			public const int light = 2131230732;
 			
-			// aapt resource value: 0x7f080010
-			public const int mapControl = 2131230736;
+			// aapt resource value: 0x7f080022
+			public const int mapControl = 2131230754;
 			
 			// aapt resource value: 0x7f080001
 			public const int none = 2131230721;
@@ -397,11 +421,41 @@ namespace SkydivingAccuracy
 			// aapt resource value: 0x7f080008
 			public const int standard = 2131230728;
 			
+			// aapt resource value: 0x7f08001c
+			public const int temp12000 = 2131230748;
+			
+			// aapt resource value: 0x7f08001d
+			public const int temp18000 = 2131230749;
+			
+			// aapt resource value: 0x7f080019
+			public const int temp3000 = 2131230745;
+			
+			// aapt resource value: 0x7f08001a
+			public const int temp6000 = 2131230746;
+			
+			// aapt resource value: 0x7f08001b
+			public const int temp9000 = 2131230747;
+			
 			// aapt resource value: 0x7f080004
 			public const int terrain = 2131230724;
 			
 			// aapt resource value: 0x7f080009
 			public const int wide = 2131230729;
+			
+			// aapt resource value: 0x7f080012
+			public const int wind12000 = 2131230738;
+			
+			// aapt resource value: 0x7f080013
+			public const int wind18000 = 2131230739;
+			
+			// aapt resource value: 0x7f08000f
+			public const int wind3000 = 2131230735;
+			
+			// aapt resource value: 0x7f080010
+			public const int wind6000 = 2131230736;
+			
+			// aapt resource value: 0x7f080011
+			public const int wind9000 = 2131230737;
 			
 			static Id()
 			{
@@ -436,13 +490,16 @@ namespace SkydivingAccuracy
 			public const int DrawerListItem = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int ForecastView = 2130903041;
+			public const int ForecastListItem = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int Main = 2130903042;
+			public const int ForecastView = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int MapView = 2130903043;
+			public const int Main = 2130903043;
+			
+			// aapt resource value: 0x7f030004
+			public const int MapView = 2130903044;
 			
 			static Layout()
 			{

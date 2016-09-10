@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/forecastDescription"
+        android:text="FDCN01 CWAO FCST BASED ON 101200 DATA VALID 101800"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="#fff" />
+    <TextView
+        android:id="@+id/forUse"
+        android:text="For use: 12.00-21.00"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="#fff" />
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stretchColumns="0,1,2,3,4"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+        <TableRow>
+            <TextView
+                android:text="3000ft"
+                android:padding="3dip"
+                android:textStyle="bold" />
+            <TextView
+                android:text="6000ft"
+                android:padding="3dip"
+                android:textStyle="bold" />
+            <TextView
+                android:text="9000ft"
+                android:padding="3dip"
+                android:textStyle="bold" />
+            <TextView
+                android:text="12000ft"
+                android:padding="3dip"
+                android:textStyle="bold" />
+            <TextView
+                android:text="18000ft"
+                android:padding="3dip"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/wind3000"
+                android:text="21 knots"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/wind6000"
+                android:text="32 knots"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/wind9000"
+                android:text="33 knots"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/wind12000"
+                android:text="45 knots"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/wind18000"
+                android:text="47 knots"
+                android:padding="3dip"
+                android:textSize="12dip" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/az3000"
+                android:text="170°"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/az6000"
+                android:text="200°"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/az9000"
+                android:text="270°"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/az12000"
+                android:text="270°"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/az18000"
+                android:text="270°"
+                android:padding="3dip"
+                android:textSize="12dip" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/temp3000"
+                android:text="33° C"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/temp6000"
+                android:text="23° C"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/temp9000"
+                android:text="22° C"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/temp12000"
+                android:text="12° C"
+                android:padding="3dip"
+                android:textSize="12dip" />
+            <TextView
+                android:id="@+id/temp18000"
+                android:text="3° C"
+                android:padding="3dip"
+                android:textSize="12dip" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
