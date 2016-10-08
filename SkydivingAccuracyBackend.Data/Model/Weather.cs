@@ -8,6 +8,6 @@ namespace SkydivingAccuracyBackend.Data.Model
         
         public DateTime UpdatedOn { get; set; }
 
-        public Forecast[] ActiveForecasts { get; set; }
+        public Forecast ActiveForecast { get; set; }
     }
 }

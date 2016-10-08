@@ -23,7 +23,7 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
             {
                 Location = weather.Location,
                 UpdatedOn = weather.UpdatedOn,
-                ForecastData = JsonConvert.SerializeObject(weather.ActiveForecasts)
+                ForecastData = JsonConvert.SerializeObject(weather.ActiveForecast)
             };
         }
 
@@ -33,7 +33,7 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
             {
                 Location = Location,
                 UpdatedOn = UpdatedOn,
-                ActiveForecasts = JsonConvert.DeserializeObject<Forecast[]>(ForecastData)
+                ActiveForecast = JsonConvert.DeserializeObject<Forecast>(ForecastData)
             };
         }
     }

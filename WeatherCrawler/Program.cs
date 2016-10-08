@@ -23,7 +23,6 @@ namespace WeatherCrawler
                 Console.WriteLine($"Specified file does not exist: {dbFileName}");
             }
 
-
             Console.WriteLine("Weather crawler started.");
             var weatherRetriever = new NavCanadaWeatherRetriever();
 

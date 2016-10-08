@@ -11,10 +11,12 @@ namespace WeatherCrawler.BusinessLogic
     internal static class NavCanadaParser
     {
         private const string HighLevelFd = "High Level FD";
-        private static Regex TableRegex = new Regex(@"\<table(.*?)\<\/table\>", RegexOptions.Singleline | RegexOptions.Compiled);
+        private static readonly Regex TableRegex = new Regex(@"\<table(.*?)\<\/table\>", RegexOptions.Singleline | RegexOptions.Compiled);
+        private static readonly Regex BasedOnRegex = new Regex(@"BASED ON (?<basedOn>\d\d)", RegexOptions.Singleline | RegexOptions.Compiled);
 
         public static List<Weather> ParseWeatherHtml(string weatherHtml)
         {
+            DateTime now = DateTime.Now;
             List<Weather> result = new List<Weather>();
 
             var tableMatches = TableRegex.Matches(weatherHtml);
@@ -42,24 +44,51 @@ namespace WeatherCrawler.BusinessLogic
 
                 var trEntries = tableDocument.XPathSelectElements("//tr[position()>1]");
 
-                List<Forecast> forecasts = new List<Forecast>();
+                Weather weather = new Weather();
+                weather.Location = airport;
+
+                bool nextDay = false;
                 foreach (var trEntry in trEntries)
                 {
-                    Forecast forecast = new Forecast();
-
                     var tdEntries = trEntry.XPathSelectElements(".//td").ToArray();
                     if (tdEntries.Length != 7)
                         continue;
 
-                    forecast.Description = tdEntries[0].Element("font").Value;
+                    string description = tdEntries[0].Element("font").Value;
+
                     string timeRange = tdEntries[1].Element("font").Element("b").Value;
                     var timeRangeTokens = timeRange.Split('-');
                     if (timeRangeTokens.Length != 2)
                         continue;
 
-                    forecast.ValidFrom = ((DateTime.Now - DateTime.UtcNow).Hours + Int32.Parse(timeRangeTokens[0]) + 24) % 24;
-                    forecast.ValidTo = ((DateTime.Now - DateTime.UtcNow).Hours + Int32.Parse(timeRangeTokens[1]) + 24) % 24;
-                    forecast.AltitudeForecasts = new AltitudeForecast[]
+                    int basedOnDay = Int32.Parse(BasedOnRegex.Match(description).Groups["basedOn"].Value);
+                    DateTime baseDay = (basedOnDay == now.Day) ? now.Date : now.Date.AddDays(-1);
+
+                    int validFrom = ((DateTime.Now - DateTime.UtcNow).Hours + Int32.Parse(timeRangeTokens[0]) + 24) % 24;
+                    int validTo = ((DateTime.Now - DateTime.UtcNow).Hours + Int32.Parse(timeRangeTokens[1]) + 24) % 24;
+
+                    DateTime validFromDate = baseDay.AddHours(validFrom);
+                    DateTime validToDate = baseDay.AddHours(validTo);
+
+                    if (nextDay)
+                    {
+                        validFromDate = validToDate.AddDays(1);
+                        validToDate = validToDate.AddDays(1);
+                    }
+
+                    if (validTo < validFrom)
+                    {
+                        validToDate = validToDate.AddDays(1);
+                        nextDay = true;
+                    }
+
+                    if (!(validFromDate < now && now < validToDate))
+                        continue;
+
+                    weather.ActiveForecast = new Forecast();
+                    weather.ActiveForecast.Description = description;
+
+                    weather.ActiveForecast.AltitudeForecasts = new AltitudeForecast[]
                     {
                         DecodeFdInfo(3000, tdEntries[2].Element("font").Value),
                         DecodeFdInfo(6000, tdEntries[3].Element("font").Value),
@@ -67,13 +96,7 @@ namespace WeatherCrawler.BusinessLogic
                         DecodeFdInfo(12000, tdEntries[5].Element("font").Value),
                         DecodeFdInfo(18000, tdEntries[6].Element("font").Value)
                     };
-
-                    forecasts.Add(forecast);
                 }
-
-                Weather weather = new Weather();
-                weather.Location = airport;
-                weather.ActiveForecasts = forecasts.ToArray();
 
                 result.Add(weather);
             }
