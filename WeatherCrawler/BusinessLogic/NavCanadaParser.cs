@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using SkydivingAccuracyBackend.Data.Model;
+using WeatherCrawler.Data;
 
 namespace WeatherCrawler.BusinessLogic
 {
@@ -13,11 +14,12 @@ namespace WeatherCrawler.BusinessLogic
         private const string HighLevelFd = "High Level FD";
         private static readonly Regex TableRegex = new Regex(@"\<table(.*?)\<\/table\>", RegexOptions.Singleline | RegexOptions.Compiled);
         private static readonly Regex BasedOnRegex = new Regex(@"BASED ON (?<basedOn>\d\d)", RegexOptions.Singleline | RegexOptions.Compiled);
+        private static readonly Regex AirportCodeRegex = new Regex(@"STN\n(?<airportCode>\w*)\s", RegexOptions.Singleline | RegexOptions.Compiled);
 
-        public static List<Weather> ParseWeatherHtml(string weatherHtml)
+        public static List<WindsAloftForecast> ParseWeatherHtml(string weatherHtml)
         {
-            DateTime now = DateTime.Now;
-            List<Weather> result = new List<Weather>();
+            DateTime now = DateTime.UtcNow;
+            List<WindsAloftForecast> result = new List<WindsAloftForecast>();
 
             var tableMatches = TableRegex.Matches(weatherHtml);
 
@@ -40,16 +42,18 @@ namespace WeatherCrawler.BusinessLogic
 
                 var header = tableDocument.XPathSelectElement("//tr[position() = 1]");
 
-                string airport = GetAirportName(header.XPathSelectElements(".//td").First().Value);
+                var airport = GetAirport(header.XPathSelectElements(".//td").First().Value);
+                if (airport == null)
+                    continue;
 
                 var trEntries = tableDocument.XPathSelectElements("//tr[position()>1]");
-
-                Weather weather = new Weather();
-                weather.Location = airport;
 
                 bool nextDay = false;
                 foreach (var trEntry in trEntries)
                 {
+                    WindsAloftForecast windsAloftForecast = new WindsAloftForecast();
+                    windsAloftForecast.Airport = airport;
+
                     var tdEntries = trEntry.XPathSelectElements(".//td").ToArray();
                     if (tdEntries.Length != 7)
                         continue;
@@ -62,10 +66,10 @@ namespace WeatherCrawler.BusinessLogic
                         continue;
 
                     int basedOnDay = Int32.Parse(BasedOnRegex.Match(description).Groups["basedOn"].Value);
-                    DateTime baseDay = (basedOnDay == now.Day) ? now.Date : now.Date.AddDays(-1);
+                    DateTime baseDay = (basedOnDay == now.ToUniversalTime().Day) ? now.Date : now.Date.AddDays(-1);
 
-                    int validFrom = ((DateTime.Now - DateTime.UtcNow).Hours + Int32.Parse(timeRangeTokens[0]) + 24) % 24;
-                    int validTo = ((DateTime.Now - DateTime.UtcNow).Hours + Int32.Parse(timeRangeTokens[1]) + 24) % 24;
+                    int validFrom = Int32.Parse(timeRangeTokens[0]);
+                    int validTo = Int32.Parse(timeRangeTokens[1]);
 
                     DateTime validFromDate = baseDay.AddHours(validFrom);
                     DateTime validToDate = baseDay.AddHours(validTo);
@@ -82,13 +86,9 @@ namespace WeatherCrawler.BusinessLogic
                         nextDay = true;
                     }
 
-                    if (!(validFromDate < now && now < validToDate))
-                        continue;
-
-                    weather.ActiveForecast = new Forecast();
-                    weather.ActiveForecast.Description = description;
-
-                    weather.ActiveForecast.AltitudeForecasts = new AltitudeForecast[]
+                    windsAloftForecast.ValidFrom = validFromDate.ToUniversalTime();
+                    windsAloftForecast.ValidTo = validToDate.ToUniversalTime();
+                    windsAloftForecast.WindsAloftRecords = new WindsAloftRecord[]
                     {
                         DecodeFdInfo(3000, tdEntries[2].Element("font").Value),
                         DecodeFdInfo(6000, tdEntries[3].Element("font").Value),
@@ -96,54 +96,55 @@ namespace WeatherCrawler.BusinessLogic
                         DecodeFdInfo(12000, tdEntries[5].Element("font").Value),
                         DecodeFdInfo(18000, tdEntries[6].Element("font").Value)
                     };
-                }
 
-                result.Add(weather);
+                    result.Add(windsAloftForecast);
+                }
             }
 
             return result;
         }
 
-        private static AltitudeForecast DecodeFdInfo(int altitude, string fd)
+        private static WindsAloftRecord DecodeFdInfo(int altitude, string fd)
         {
-            AltitudeForecast altitudeForecast = new AltitudeForecast();
+            WindsAloftRecord windsAloftRecord = new WindsAloftRecord();
 
-            altitudeForecast.Altitude = altitude;
+            windsAloftRecord.Altitude = altitude;
 
             if (String.IsNullOrWhiteSpace(fd))
-                return altitudeForecast;
+                return windsAloftRecord;
 
             if (fd.Length > 4)
             {
                 string temperatureInfo = fd.Substring(4);
-                altitudeForecast.Temperature = Int32.Parse(temperatureInfo);
+                windsAloftRecord.Temperature = Int32.Parse(temperatureInfo);
             }
 
             fd = fd.Substring(0, 4);
 
             if (fd == "9900")
-                return altitudeForecast;
+                return windsAloftRecord;
 
             int fdAngle = Int32.Parse(fd.Substring(0, 2));
             int fdKnots = Int32.Parse(fd.Substring(2, 2));
 
             if (fdAngle > 36)
             {
-                altitudeForecast.Direction = fdAngle - 50;
-                altitudeForecast.Knots = 100 + fdKnots;
+                windsAloftRecord.Direction = fdAngle - 50;
+                windsAloftRecord.Knots = 100 + fdKnots;
             }
             else
             {
-                altitudeForecast.Direction = fdAngle * 10;
-                altitudeForecast.Knots = fdKnots;
+                windsAloftRecord.Direction = fdAngle * 10;
+                windsAloftRecord.Knots = fdKnots;
             }
 
-            return altitudeForecast;
+            return windsAloftRecord;
         }
 
-        private static string GetAirportName(string airportData)
+        private static Airport GetAirport(string airportData)
         {
-            return airportData.Split('-').Last().Trim();
+            string airportCode = AirportCodeRegex.Match(airportData).Groups["airportCode"].Value;
+            return Airports.GetByCode(airportCode);
         }
     }
 }

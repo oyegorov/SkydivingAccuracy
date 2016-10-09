@@ -19,11 +19,11 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
             _dbFileName = dbFileName;
         }
 
-        public DbSet<WeatherInfo> WeatherInfos { get; set; }
+        public DbSet<WindsAloftForecastDto> WindsAloft { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Filename=./{_dbFileName}");
+            optionsBuilder.UseSqlite($"Filename={_dbFileName}");
         }
     }
 }

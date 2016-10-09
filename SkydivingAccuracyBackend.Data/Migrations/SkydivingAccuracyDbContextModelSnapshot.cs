@@ -15,20 +15,30 @@ namespace SkydivingAccuracyBackend.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
 
-            modelBuilder.Entity("SkydivingAccuracyBackend.Data.DataAccess.WeatherInfo", b =>
+            modelBuilder.Entity("SkydivingAccuracyBackend.Data.DataAccess.WindsAloftForecastDto", b =>
                 {
-                    b.Property<int>("WeatherInfoId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ForecastData");
+                    b.Property<string>("AirportCode");
 
-                    b.Property<string>("Location");
+                    b.Property<string>("AirportName");
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
 
                     b.Property<DateTime>("UpdatedOn");
 
-                    b.HasKey("WeatherInfoId");
+                    b.Property<DateTime>("ValidFrom");
 
-                    b.ToTable("WeatherInfos");
+                    b.Property<DateTime>("ValidTo");
+
+                    b.Property<string>("WindsAloftData");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WindsAloft");
                 });
         }
     }
