@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using SkydivingAccuracyBackend.Data.DataAccess;
 using SkydivingAccuracyBackend.Data.Model;
 using SkydivingAccuracyBackend.Services.BusinessLogic;
@@ -12,19 +10,19 @@ using SkydivingAccuracyBackend.Services.BusinessLogic;
 namespace SkydivingAccuracyBackend.Services.Controllers
 {
     [Route("api/[controller]")]
-    public class WeatherForecastsController : Controller
+    public class WeatherController : Controller
     {
         private const int CutoffDistanceInKms = 800;
 
-        [HttpGet]
+        [HttpGet("currentWeather")]
         public async Task<IActionResult> Get([FromQuery]double longitude, [FromQuery]double latitude)
         {
             DateTime requestedDateTime = DateTime.UtcNow;
 
             var location = new GeoCoordinate(latitude, longitude);
 
-            var windsAloftForecast = await GetWindsAloftForecast(location);
-            var groundForecast = await GetGroundForecast(location);
+            var windsAloftForecast = await GetWindsAloft(location);
+            var groundForecast = await GetGroundWeather(location);
 
             return new OkObjectResult(new Weather
             {
@@ -34,7 +32,7 @@ namespace SkydivingAccuracyBackend.Services.Controllers
             });
         }
 
-        private async Task<GroundWeather> GetGroundForecast(GeoCoordinate location)
+        private async Task<GroundWeather> GetGroundWeather(GeoCoordinate location)
         {
             double distance;
             var metarStation = MetarStations.GetClosestStation(location, out distance);
@@ -48,7 +46,7 @@ namespace SkydivingAccuracyBackend.Services.Controllers
             return groundForecast;
         }
 
-        private Task<WindsAloft> GetWindsAloftForecast(GeoCoordinate location)
+        private Task<WindsAloft> GetWindsAloft(GeoCoordinate location)
         {
             using (var db = new SkydivingAccuracyDbContext(Startup.Configuration["DbFilePath"]))
             {
