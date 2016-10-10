@@ -16,7 +16,7 @@ namespace WeatherCrawler.BusinessLogic
         private static readonly Regex BasedOnRegex = new Regex(@"BASED ON (?<basedOn>\d\d)", RegexOptions.Singleline | RegexOptions.Compiled);
         private static readonly Regex AirportCodeRegex = new Regex(@"STN\n(?<airportCode>\w*)\s", RegexOptions.Singleline | RegexOptions.Compiled);
 
-        public static List<WindsAloft> ParseWeatherHtml(string weatherHtml)
+        public static List<WindsAloft> ParseWeatherHtml(string weatherHtml, DateTime updatedOn)
         {
             DateTime now = DateTime.UtcNow;
             List<WindsAloft> result = new List<WindsAloft>();
@@ -96,6 +96,8 @@ namespace WeatherCrawler.BusinessLogic
                         DecodeFdInfo(12000, tdEntries[5].Element("font").Value),
                         DecodeFdInfo(18000, tdEntries[6].Element("font").Value)
                     };
+
+                    windsAloft.UpdatedOn = updatedOn;
 
                     result.Add(windsAloft);
                 }
