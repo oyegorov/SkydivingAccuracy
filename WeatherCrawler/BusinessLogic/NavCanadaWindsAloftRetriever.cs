@@ -7,7 +7,7 @@ namespace WeatherCrawler.BusinessLogic
 {
     public class NavCanadaWindsAloftRetriever : IWindsAloftRetriever
     {
-        public List<WindsAloftForecast> GetWindsAloft()
+        public List<WindsAloft> GetWindsAloft()
         {
             HttpClient httpClient = new HttpClient();
 

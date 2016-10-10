@@ -24,31 +24,31 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
 
         public string WindsAloftData { get; set; }
 
-        public static WindsAloftForecastDto FromWindsAloftForecast(WindsAloftForecast windsAloftForecast)
+        public static WindsAloftForecastDto FromWindsAloftForecast(WindsAloft windsAloft)
         {
-            if (windsAloftForecast == null)
-                throw new ArgumentNullException(nameof(windsAloftForecast));
-            if (windsAloftForecast.WindsAloftRecords == null)
-                throw new ArgumentNullException(nameof(windsAloftForecast.WindsAloftRecords));
-            if (windsAloftForecast.Airport == null)
-                throw new ArgumentNullException(nameof(windsAloftForecast.Airport));
+            if (windsAloft == null)
+                throw new ArgumentNullException(nameof(windsAloft));
+            if (windsAloft.WindsAloftRecords == null)
+                throw new ArgumentNullException(nameof(windsAloft.WindsAloftRecords));
+            if (windsAloft.Airport == null)
+                throw new ArgumentNullException(nameof(windsAloft.Airport));
 
             return new WindsAloftForecastDto
             {
-                UpdatedOn = windsAloftForecast.UpdatedOn,
-                ValidFrom = windsAloftForecast.ValidFrom,
-                ValidTo = windsAloftForecast.ValidTo,
-                AirportCode = windsAloftForecast.Airport.Code,
-                AirportName = windsAloftForecast.Airport.Name,
-                Latitude = windsAloftForecast.Airport.Latitude,
-                Longitude = windsAloftForecast.Airport.Longitude,
-                WindsAloftData = JsonConvert.SerializeObject(windsAloftForecast.WindsAloftRecords)
+                UpdatedOn = windsAloft.UpdatedOn,
+                ValidFrom = windsAloft.ValidFrom,
+                ValidTo = windsAloft.ValidTo,
+                AirportCode = windsAloft.Airport.Code,
+                AirportName = windsAloft.Airport.Name,
+                Latitude = windsAloft.Airport.Latitude,
+                Longitude = windsAloft.Airport.Longitude,
+                WindsAloftData = JsonConvert.SerializeObject(windsAloft.WindsAloftRecords)
             };
         }
 
-        public WindsAloftForecast ToWindsAloftForecast()
+        public WindsAloft ToWindsAloftForecast()
         {
-            return new WindsAloftForecast
+            return new WindsAloft
             {
                 UpdatedOn = UpdatedOn,
                 

@@ -16,10 +16,10 @@ namespace WeatherCrawler.BusinessLogic
         private static readonly Regex BasedOnRegex = new Regex(@"BASED ON (?<basedOn>\d\d)", RegexOptions.Singleline | RegexOptions.Compiled);
         private static readonly Regex AirportCodeRegex = new Regex(@"STN\n(?<airportCode>\w*)\s", RegexOptions.Singleline | RegexOptions.Compiled);
 
-        public static List<WindsAloftForecast> ParseWeatherHtml(string weatherHtml)
+        public static List<WindsAloft> ParseWeatherHtml(string weatherHtml)
         {
             DateTime now = DateTime.UtcNow;
-            List<WindsAloftForecast> result = new List<WindsAloftForecast>();
+            List<WindsAloft> result = new List<WindsAloft>();
 
             var tableMatches = TableRegex.Matches(weatherHtml);
 
@@ -51,8 +51,8 @@ namespace WeatherCrawler.BusinessLogic
                 bool nextDay = false;
                 foreach (var trEntry in trEntries)
                 {
-                    WindsAloftForecast windsAloftForecast = new WindsAloftForecast();
-                    windsAloftForecast.Airport = airport;
+                    WindsAloft windsAloft = new WindsAloft();
+                    windsAloft.Airport = airport;
 
                     var tdEntries = trEntry.XPathSelectElements(".//td").ToArray();
                     if (tdEntries.Length != 7)
@@ -86,9 +86,9 @@ namespace WeatherCrawler.BusinessLogic
                         nextDay = true;
                     }
 
-                    windsAloftForecast.ValidFrom = validFromDate.ToUniversalTime();
-                    windsAloftForecast.ValidTo = validToDate.ToUniversalTime();
-                    windsAloftForecast.WindsAloftRecords = new WindsAloftRecord[]
+                    windsAloft.ValidFrom = validFromDate.ToUniversalTime();
+                    windsAloft.ValidTo = validToDate.ToUniversalTime();
+                    windsAloft.WindsAloftRecords = new WindsAloftRecord[]
                     {
                         DecodeFdInfo(3000, tdEntries[2].Element("font").Value),
                         DecodeFdInfo(6000, tdEntries[3].Element("font").Value),
@@ -97,7 +97,7 @@ namespace WeatherCrawler.BusinessLogic
                         DecodeFdInfo(18000, tdEntries[6].Element("font").Value)
                     };
 
-                    result.Add(windsAloftForecast);
+                    result.Add(windsAloft);
                 }
             }
 
@@ -129,13 +129,13 @@ namespace WeatherCrawler.BusinessLogic
 
             if (fdAngle > 36)
             {
-                windsAloftRecord.Direction = fdAngle - 50;
-                windsAloftRecord.Knots = 100 + fdKnots;
+                windsAloftRecord.WindHeading = fdAngle - 50;
+                windsAloftRecord.WindSpeed = 100 + fdKnots;
             }
             else
             {
-                windsAloftRecord.Direction = fdAngle * 10;
-                windsAloftRecord.Knots = fdKnots;
+                windsAloftRecord.WindHeading = fdAngle * 10;
+                windsAloftRecord.WindSpeed = fdKnots;
             }
 
             return windsAloftRecord;

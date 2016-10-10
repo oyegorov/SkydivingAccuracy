@@ -6,6 +6,8 @@ namespace SkydivingAccuracyBackend.Data.Model
     {
         public DateTime RequestedOn { get; set; }
 
-        public WindsAloftForecast WindsAloftForecast { get; set; }
+        public WindsAloft WindsAloft { get; set; }
+
+        public GroundWeather GroundWeather { get; set; }
     }
 }

@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SkydivingAccuracyBackend.Services.BusinessLogic;
 
 namespace SkydivingAccuracyBackend.Services
 {
@@ -27,6 +30,8 @@ namespace SkydivingAccuracyBackend.Services
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            MetarStations.Load();
         }
 
         public static IConfigurationRoot Configuration { get; set; }
@@ -37,7 +42,11 @@ namespace SkydivingAccuracyBackend.Services
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(o =>
+            {
+                o.SerializerSettings.Converters.Add(new StringEnumConverter());
+                o.SerializerSettings.Formatting = Formatting.Indented;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

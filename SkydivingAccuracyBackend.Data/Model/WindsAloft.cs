@@ -2,7 +2,7 @@ using System;
 
 namespace SkydivingAccuracyBackend.Data.Model
 {
-    public class WindsAloftForecast
+    public class WindsAloft
     {
         public DateTime UpdatedOn { get; set; }
 

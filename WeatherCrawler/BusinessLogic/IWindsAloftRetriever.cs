@@ -5,6 +5,6 @@ namespace WeatherCrawler.BusinessLogic
 {
     public interface IWindsAloftRetriever
     {
-        List<WindsAloftForecast> GetWindsAloft();
+        List<WindsAloft> GetWindsAloft();
     }
 }
