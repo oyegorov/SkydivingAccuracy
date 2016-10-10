@@ -2,11 +2,11 @@
 
 namespace SkydivingAccuracyBackend.Data.Model
 {
-    public struct GroundWeather
+    public class GroundWeather
     {
         public MetarStation MetarStation { get; set; }
 
-        public double DistanceToStation { get; set; }
+        public int DistanceToStation { get; set; }
 
         public int Temperature { get; set; }
 

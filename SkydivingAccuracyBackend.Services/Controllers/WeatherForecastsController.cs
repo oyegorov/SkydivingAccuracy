@@ -14,6 +14,8 @@ namespace SkydivingAccuracyBackend.Services.Controllers
     [Route("api/[controller]")]
     public class WeatherForecastsController : Controller
     {
+        private const int CutoffDistanceInKms = 800;
+
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery]double longitude, [FromQuery]double latitude)
         {
@@ -36,8 +38,12 @@ namespace SkydivingAccuracyBackend.Services.Controllers
         {
             double distance;
             var metarStation = MetarStations.GetClosestStation(location, out distance);
+
+            if (distance > CutoffDistanceInKms*1000)
+                return null;
+
             var groundForecast = await MetarStations.GetGroundForecast(metarStation);
-            groundForecast.DistanceToStation = distance;
+            groundForecast.DistanceToStation = (int)distance / 1000;
 
             return groundForecast;
         }
@@ -63,6 +69,9 @@ namespace SkydivingAccuracyBackend.Services.Controllers
                         closestWindsAloftForecastDto = windsAloftDto;
                     }
                 }
+
+                if (distance > CutoffDistanceInKms * 1000)
+                    return Task.FromResult<WindsAloft>(null);
 
                 var windsAloftForecast = closestWindsAloftForecastDto?.ToWindsAloftForecast();
 
