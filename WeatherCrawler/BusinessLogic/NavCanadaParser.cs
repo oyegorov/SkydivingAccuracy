@@ -90,11 +90,11 @@ namespace WeatherCrawler.BusinessLogic
                     windsAloft.ValidTo = validToDate.ToUniversalTime();
                     windsAloft.WindsAloftRecords = new WindsAloftRecord[]
                     {
-                        DecodeFdInfo(3000, tdEntries[2].Element("font").Value),
-                        DecodeFdInfo(6000, tdEntries[3].Element("font").Value),
-                        DecodeFdInfo(9000, tdEntries[4].Element("font").Value),
-                        DecodeFdInfo(12000, tdEntries[5].Element("font").Value),
-                        DecodeFdInfo(18000, tdEntries[6].Element("font").Value)
+                        FdUtils.DecodeFdInfo(3000, tdEntries[2].Element("font").Value),
+                        FdUtils.DecodeFdInfo(6000, tdEntries[3].Element("font").Value),
+                        FdUtils.DecodeFdInfo(9000, tdEntries[4].Element("font").Value),
+                        FdUtils.DecodeFdInfo(12000, tdEntries[5].Element("font").Value),
+                        FdUtils.DecodeFdInfo(18000, tdEntries[6].Element("font").Value)
                     };
 
                     windsAloft.UpdatedOn = updatedOn;
@@ -104,43 +104,6 @@ namespace WeatherCrawler.BusinessLogic
             }
 
             return result;
-        }
-
-        private static WindsAloftRecord DecodeFdInfo(int altitude, string fd)
-        {
-            WindsAloftRecord windsAloftRecord = new WindsAloftRecord();
-
-            windsAloftRecord.Altitude = altitude;
-
-            if (String.IsNullOrWhiteSpace(fd))
-                return windsAloftRecord;
-
-            if (fd.Length > 4)
-            {
-                string temperatureInfo = fd.Substring(4);
-                windsAloftRecord.Temperature = Int32.Parse(temperatureInfo);
-            }
-
-            fd = fd.Substring(0, 4);
-
-            if (fd == "9900")
-                return windsAloftRecord;
-
-            int fdAngle = Int32.Parse(fd.Substring(0, 2));
-            int fdKnots = Int32.Parse(fd.Substring(2, 2));
-
-            if (fdAngle > 36)
-            {
-                windsAloftRecord.WindHeading = fdAngle - 50;
-                windsAloftRecord.WindSpeed = 100 + fdKnots;
-            }
-            else
-            {
-                windsAloftRecord.WindHeading = fdAngle * 10;
-                windsAloftRecord.WindSpeed = fdKnots;
-            }
-
-            return windsAloftRecord;
         }
 
         private static Airport GetAirport(string airportData)

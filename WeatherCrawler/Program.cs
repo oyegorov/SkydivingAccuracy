@@ -53,10 +53,11 @@ namespace WeatherCrawler
             sw.Stop();
             Console.WriteLine($"Done. Elapsed time: {sw.ElapsedMilliseconds}ms");
 
-            Console.WriteLine("Weather crawler started.");
-            var windsAloftRetriever= new NavCanadaWindsAloftRetriever();
 
-            Console.WriteLine("Retrieving data from NavCanada");
+            Console.WriteLine("Weather crawler started.");
+            var windsAloftRetriever= new AggregatedWindsAloftRetriever();
+
+            Console.WriteLine("Retrieving winds aloft data from different sources");
             
             sw.Restart();
             var windsAloftForecasts = windsAloftRetriever.GetWindsAloft();
@@ -72,7 +73,7 @@ namespace WeatherCrawler
                 var transaction = db.Database.BeginTransaction();
 
                 DateTime cutoffDate = DateTime.UtcNow.AddDays(-2);
-                var itemsToDelete = db.WindsAloft.Where(w => w.UpdatedOn < cutoffDate);
+                var itemsToDelete = db.WindsAloft.Where(w => w.UpdatedOn < cutoffDate || w.ValidTo < DateTime.UtcNow);
                 db.RemoveRange(itemsToDelete);
 
                 foreach (var windsAloftForecast in windsAloftForecasts)

@@ -66,6 +66,12 @@ namespace SkydivingAccuracyBackend.Services.Controllers
                         distance = currentDistance;
                         closestWindsAloftForecastDto = windsAloftDto;
                     }
+                    else if (closestWindsAloftForecastDto != null &&
+                             windsAloftDto.AirportCode == closestWindsAloftForecastDto.AirportCode &&
+                             windsAloftDto.UpdatedOn > closestWindsAloftForecastDto.UpdatedOn)
+                    {
+                        closestWindsAloftForecastDto = windsAloftDto;
+                    }
                 }
 
                 if (distance > CutoffDistanceInKms * 1000)

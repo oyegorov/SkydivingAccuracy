@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/WeatherForecasts/?longitude=30&latitude=50",
+      "launchUrl": "api/weather/currentWeather?longitude=30&latitude=50",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
