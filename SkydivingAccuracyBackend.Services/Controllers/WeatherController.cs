@@ -35,12 +35,21 @@ namespace SkydivingAccuracyBackend.Services.Controllers
         private async Task<GroundWeather> GetGroundWeather(GeoCoordinate location)
         {
             double distance;
-            var metarStation = MetarStations.GetClosestStation(location, out distance);
+            GroundWeather groundForecast = null;
+            do
+            {
+                var metarStation = MetarStations.GetClosestStation(location, out distance);
 
-            if (distance > CutoffDistanceInKms*1000)
-                return null;
+                if (distance > CutoffDistanceInKms * 1000)
+                    return null;
 
-            var groundForecast = await MetarStations.GetGroundForecast(metarStation);
+                groundForecast = await MetarStations.GetGroundForecast(metarStation);
+
+                if (groundForecast == null)
+                    metarStation.ForecastUnavailable = true;
+            }
+            while (groundForecast == null);
+
             groundForecast.DistanceToStation = (int)distance / 1000;
 
             return groundForecast;

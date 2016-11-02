@@ -48,7 +48,7 @@ namespace SkydivingAccuracyBackend.Services.BusinessLogic
         {
             MetarStation closestStation = null;
             distance = double.MaxValue;
-            foreach (var metarStation in AllStations)
+            foreach (var metarStation in AllStations.Where(s => !s.ForecastUnavailable))
             {
                 double currentDistance = location.GetDistanceTo(new GeoCoordinate(metarStation.Latitude, metarStation.Longitude));
                 if (currentDistance < distance)
@@ -74,7 +74,10 @@ namespace SkydivingAccuracyBackend.Services.BusinessLogic
             string payload = await response.Content.ReadAsStringAsync();
 
             var document = XDocument.Parse(payload);
-                      
+            var num_results = Convert.ToDouble(XmlTools.GetNode(document, "data").Attribute("num_results")?.Value);
+            if (num_results == 0)
+                return null;
+
             var temp = Convert.ToDouble(XmlTools.GetElementContent("temp_c", document, "data", "METAR"));
             var windSpeed = Convert.ToDouble(XmlTools.GetElementContent("wind_speed_kt", document, "data", "METAR"));
             var windGust = Convert.ToDouble(XmlTools.GetElementContent("wind_gust_kt", document, "data", "METAR"));

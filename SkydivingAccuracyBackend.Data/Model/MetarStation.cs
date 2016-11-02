@@ -1,4 +1,6 @@
-﻿namespace SkydivingAccuracyBackend.Data.Model
+﻿using Newtonsoft.Json;
+
+namespace SkydivingAccuracyBackend.Data.Model
 {
     public class MetarStation
     {
@@ -15,5 +17,8 @@
         public string Region { get; set; }
 
         public string City { get; set; }
+
+        [JsonIgnore]
+        public bool ForecastUnavailable { get; set; }
     }
 }
