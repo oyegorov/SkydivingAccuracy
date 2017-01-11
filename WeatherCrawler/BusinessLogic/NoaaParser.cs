@@ -39,7 +39,7 @@ namespace WeatherCrawler.BusinessLogic
                             if (m.Success)
                             {
                                 int basedOnDay = Int32.Parse(m.Groups["basedOn"].Value);
-                                basedOnDateTime = (basedOnDay == now.ToUniversalTime().Day)
+                                basedOnDateTime = (basedOnDay == now.Day)
                                     ? now.Date
                                     : now.Date.AddDays(-1);
                                 currentlyParsing = CurrentlyParsing.Validity;

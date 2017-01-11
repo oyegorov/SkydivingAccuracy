@@ -38,7 +38,7 @@ namespace WeatherCrawler.BusinessLogic
                    new FormUrlEncodedContent(parameters)).Result;
                 string responseData = response.Content.ReadAsStringAsync().Result;
 
-                DateTime updatedOn = DateTime.Now.ToUniversalTime();
+                DateTime updatedOn = DateTime.UtcNow;
                 var regionalWindsAloft = NavCanadaParser.ParseWeatherHtml(responseData, updatedOn);
 
                 canadaWideWindsAloft.AddRange(regionalWindsAloft);
