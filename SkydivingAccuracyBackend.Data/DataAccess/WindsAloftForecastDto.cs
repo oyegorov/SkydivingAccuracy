@@ -50,11 +50,11 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
         {
             return new WindsAloft
             {
-                UpdatedOn = UpdatedOn,
+                UpdatedOn = DateTime.SpecifyKind(UpdatedOn, DateTimeKind.Utc),
                 
-                ValidFrom = ValidFrom,
+                ValidFrom = DateTime.SpecifyKind(ValidFrom, DateTimeKind.Utc),
 
-                ValidTo = ValidTo,
+                ValidTo = DateTime.SpecifyKind(ValidTo, DateTimeKind.Utc),
 
                 Airport = new Airport
                 {
