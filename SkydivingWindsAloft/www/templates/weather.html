@@ -1,0 +1,42 @@
+<ion-view view-title="Weather">
+    <ion-nav-buttons side="primary">
+        <button class="button" ng-click="doSomething()">
+            Choose DZ
+        </button>
+        <button class="button" ng-click="$scope.loadWeather();" style="margin-left: 10px">
+            <i class="icon ion-refresh"></i>
+        </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <div class="list">
+            <div class="item" style="text-align: center">
+                Weather for Skydive Toronto
+            </div>
+
+            <div class="card">
+                <div class="item item-divider">
+                    Ground level
+                </div>
+                <div class="item item-icon-left">
+                    <div class="icon ion-arrow-up-a" rotate degrees="{{groundWeather.windHeading}}" style="float: left; margin-right: 5px; margin-top: px"></div>
+                    <b>{{groundWeather.bearing}}</b>
+                    <p>Wind speed: {{groundWeather.windSpeed * 1.852 | number:0}} km/h ({{groundWeather.windSpeed * 1.15 | number:0}} mph)
+                    <p>Wind gust: {{groundWeather.windGust * 1.852 | number:0}} km/h ({{groundWeather.windGust * 1.15 | number:0}} mph)
+                    <p>Temperature: {{groundWeather.temperature}}&deg; C ({{groundWeather.temperature * 1.8 + 32 | number:0}}&deg; F)
+                </div>
+            </div>
+
+            <div class="card" ng-repeat="windsAloftRecord in windsAloftRecords">
+                <div class="item item-divider">
+                    {{windsAloftRecord.altitude}} feet
+                </div>
+                <div class="item item-icon-left">
+                    <div class="icon ion-arrow-up-a" rotate degrees="{{windsAloftRecord.windHeading}}" style="float: left; margin-right: 5px; margin-top: px"></div>
+                    <b>{{windsAloftRecord.bearing}}</b>
+                    <p>Wind speed: {{windsAloftRecord.windSpeed * 1.852 | number:0}} km/h ({{windsAloftRecord.windSpeed * 1.15 | number:0}} mph)
+                    <p ng-show="windsAloftRecord.temperature != null">Temperature: {{windsAloftRecord.temperature}}&deg; C ({{windsAloftRecord.temperature * 1.8 + 32 | number:0}}&deg; F)
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
