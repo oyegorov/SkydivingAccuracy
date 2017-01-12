@@ -243,3 +243,18 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+node_modules
+.tmp
+.sass-cache
+<%= appPath %>/bower_components
+coverage
+platforms
+plugins
+*.swp
+*.swo
+*.log
+*.DS_Store
+lib
+ionic.app.css
+ionic.app.min.css
