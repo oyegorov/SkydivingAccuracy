@@ -18,7 +18,7 @@ namespace WeatherCrawler.Data
 
             var assembly = Assembly.GetEntryAssembly();
 
-            using (var reader = new StreamReader(assembly.GetManifestResourceStream("WeatherCrawler.Airports.csv")))
+            using (var reader = new StreamReader(assembly.GetManifestResourceStream("WeatherCrawler.AirportList.csv")))
             {
                 var csvReader = new CsvReader(reader);
 
