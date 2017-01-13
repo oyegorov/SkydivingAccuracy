@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using CsvHelper;
 using SkydivingAccuracyBackend.Data.Model;
 
@@ -11,13 +12,15 @@ namespace WeatherCrawler.Data
     {
         private static Dictionary<string, Airport> _airportsDictionary;
 
-        public static void Load(string fileName)
+        public static void Load()
         {
             _airportsDictionary = new Dictionary<string, Airport>();
 
-            using (var fileStream = new FileStream(fileName, FileMode.Open))
+            var assembly = Assembly.GetEntryAssembly();
+
+            using (var reader = new StreamReader(assembly.GetManifestResourceStream("WeatherCrawler.Airports.csv")))
             {
-                var csvReader = new CsvReader(new StreamReader(fileStream));
+                var csvReader = new CsvReader(reader);
 
                 csvReader.Configuration.RegisterClassMap<AirportMap>();
                 var records = csvReader.GetRecords<Airport>();

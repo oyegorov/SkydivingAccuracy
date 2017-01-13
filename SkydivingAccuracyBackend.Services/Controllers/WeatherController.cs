@@ -14,7 +14,7 @@ namespace SkydivingAccuracyBackend.Services.Controllers
     {
         private const int CutoffDistanceInKms = 800;
 
-        [HttpGet("currentWeather")]
+        [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery]double longitude, [FromQuery]double latitude)
         {
             DateTime requestedDateTime = DateTime.UtcNow;
@@ -57,7 +57,7 @@ namespace SkydivingAccuracyBackend.Services.Controllers
 
         private Task<WindsAloft> GetWindsAloft(GeoCoordinate location)
         {
-            using (var db = new SkydivingAccuracyDbContext(Startup.Configuration["DbFilePath"]))
+            using (var db = new SkydivingAccuracyDbContext(Startup.DbFileName))
             {
                 double distance = double.MaxValue;
 

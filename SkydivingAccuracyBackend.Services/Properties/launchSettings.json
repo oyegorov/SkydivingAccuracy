@@ -18,8 +18,9 @@
     },
     "SkydivingAccuracyBackend.Services": {
       "commandName": "Project",
+      "commandLineArgs": "$(SolutionDir)/skydiving_accuracy.db",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/api/values",
+      "launchUrl": "http://localhost:5000/api/weather/currentWeather?longitude=30&latitude=50",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

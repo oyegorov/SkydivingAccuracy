@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WeatherCrawler": {
+      "commandName": "Project",
+      "commandLineArgs": "$(SolutionDir)/skydiving_accuracy.db"
+    }
+  }
+}

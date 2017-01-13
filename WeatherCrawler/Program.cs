@@ -16,22 +16,16 @@ namespace WeatherCrawler
     {
         public static int Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 1)
             {
-                Console.WriteLine("Usage: dotnet WeatherCrawler [dbFileName] [airportsCsv]");
+                Console.WriteLine("Usage: dotnet WeatherCrawler.dll [dbFileName]");
                 return -1;
             }
 
             string dbFileName = args[0];
-            string airportsCsv = args[1];
             if (!File.Exists(dbFileName))
             {
                 Console.WriteLine($"Database does not exist: {dbFileName}");
-                return -1;
-            }
-            if (!File.Exists(airportsCsv))
-            {
-                Console.WriteLine($"Airports CSV file does not exist: {dbFileName}");
                 return -1;
             }
 
@@ -42,7 +36,7 @@ namespace WeatherCrawler
 
             try
             {
-                Airports.Load(airportsCsv);
+                Airports.Load();
             }
             catch (Exception ex)
             {

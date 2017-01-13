@@ -30,11 +30,14 @@ namespace SkydivingAccuracyBackend.Services
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-
+            
+            Dropzones.Load();
             MetarStations.Load();
         }
 
         public static IConfigurationRoot Configuration { get; set; }
+
+        public static string DbFileName { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
