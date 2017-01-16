@@ -4,7 +4,7 @@
             <div class="list">
                 <div class="item item-input-inset">
                     <label class="item-input-wrapper">
-                        <input type="search" placeholder="Dropzone Name" ng-model="locationInfo.dropzoneSearchPattern">
+                        <input type="search" placeholder="Dropzone Search" ng-model="locationInfo.dropzoneSearchPattern" onsearch="findDropzone()">
                     </label>
                     <button class="button button-small" ng-click="findDropzone()">
                         <i class="icon ion-location"></i>&nbsp;Find DZ&nbsp;
