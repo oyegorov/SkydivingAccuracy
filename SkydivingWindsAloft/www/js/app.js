@@ -49,15 +49,24 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             }
         }
     })
-      .state('app.weather', {
-          url: '/weather',
-          views: {
-              'menuContent': {
-                  templateUrl: 'templates/weather.html',
-                  controller: 'WeatherController'
-              }
-          }
-      });
+    .state('app.settings', {
+        url: '/settings',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/settings.html',
+                controller: 'SettingsController'
+            }
+        }
+    })
+    .state('app.weather', {
+        url: '/weather',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/weather.html',
+                controller: 'WeatherController'
+            }
+        }
+    });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/weather');
 });

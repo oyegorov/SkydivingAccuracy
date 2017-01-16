@@ -73,6 +73,15 @@ angular.module('starter.controllers', [])
     }
 })
 
+.controller('SettingsController', function ($scope, settingsService) {
+    $scope.temperatureUnits = ['Celsius', 'Fahrenheit'];
+    $scope.windsSpeedUnits = ['KM/H', 'M/S', 'MPH', 'KNOTS'];
+    $scope.altitudeUnits = ['Feet', 'Meters'];
+
+    $scope.$on('$ionicView.beforeEnter', function () {
+    });
+})
+
 .controller('LocationController', function ($scope, $ionicLoading, $ionicPopup, $ionicHistory, $state, dropzoneService, settingsService) {
     var getDropzoneFromService = function(position, nameFilter) {
         dropzoneService.getDropzone(position, nameFilter).then(function (dropzone) {

@@ -1,0 +1,30 @@
+﻿<ion-view view-title="Settings">
+    <ion-content>
+        <div class="list">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Temperature Units
+                </div>
+                <select>
+                    <option ng-repeat="u in temperatureUnits">{{u}}</option>
+                </select>
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Wind Speed Units
+                </div>
+                <select>
+                    <option ng-repeat="u in windsSpeedUnits">{{u}}</option>
+                </select>
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Altitude Units
+                </div>
+                <select>
+                    <option ng-repeat="u in altitudeUnits">{{u}}</option>
+                </select>
+            </label>
+        </div>
+    </ion-content>
+</ion-view>
