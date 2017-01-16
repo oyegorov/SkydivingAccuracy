@@ -60,11 +60,11 @@
 
         $scope.$on('$ionicView.beforeEnter', function() {
             var locationInfo = settingsService.loadLocationInfo();
-            $scope.locationInfo = locationInfo != null
-                ? locationInfo
-                : {
-                    dropzoneSearchPattern: ''
-                };
+            if (locationInfo == null)
+                locationInfo = {};
+            locationInfo.dropzoneSearchPattern = '';
+
+            $scope.locationInfo = locationInfo;
             $scope.disableSaveButton = true;
         });
     });
