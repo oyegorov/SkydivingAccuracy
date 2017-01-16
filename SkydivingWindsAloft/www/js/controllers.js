@@ -20,6 +20,24 @@ angular.module('starter.controllers', [])
     }
 })
 
+.factory('settingsService', function () {
+    var storage = window.localStorage;
+
+    return {
+        loadLocationInfo: function () {
+            var serializedSettings = storage.getItem('locationInfo');
+            if (serializedSettings != null)
+                return JSON.parse(serializedSettings);
+
+            return null;
+        },
+
+        saveLocationInfo: function(locationInfo) {
+            storage.setItem('locationInfo', JSON.stringify(locationInfo));
+        }
+    }
+})
+
 .factory('weatherService', function ($http) {
     var weather = [];
 
@@ -54,7 +72,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('LocationController', function ($scope, $ionicLoading, $ionicPopup, dropzoneService) {
+.controller('LocationController', function ($scope, $ionicLoading, $ionicPopup, dropzoneService, settingsService) {
     var getDropzoneFromService = function(position, nameFilter) {
         dropzoneService.getDropzone(position, nameFilter).then(function (dropzone) {
             $scope.locationInfo.latitude = dropzone.latitude;
@@ -96,15 +114,17 @@ angular.module('starter.controllers', [])
             return;
         }
 
-        var storage = window.localStorage;
-        storage.setItem('locationName', $scope.locationInfo.dropzoneName == null ? '(' + $scope.locationInfo.latitude + '; ' + $scope.locationInfo.longitude + ')' : $scope.locationInfo.dropzoneName);
-        storage.setItem('latitude', $scope.locationInfo.latitude.toString());
-        storage.setItem('longitude', $scope.locationInfo.longitude.toString());
+        settingsService.saveLocationInfo($scope.locationInfo);
     };
 
-    $scope.locationInfo = {
-        dropzoneSearchPattern: ''
-    };
+    $scope.$on('$ionicView.beforeEnter', function () {
+        var locationInfo = settingsService.loadLocationInfo();
+        $scope.locationInfo = locationInfo != null
+            ? locationInfo
+            : {
+                dropzoneSearchPattern: ''
+            };
+    });
 })
 
 .controller('WeatherController', function ($scope, $location, $ionicLoading, weatherService) {
