@@ -26,14 +26,14 @@
                 </div>
                 <label class="item item-input">
                     <span class="input-label">Latitude</span>
-                    <input type="number" ng-model="locationInfo.latitude" ng-change="resetDropzone()">
+                    <input type="number" ng-model="locationInfo.latitude" ng-change="onCoordinatesChanged()">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Longitude</span>
-                    <input type="number" ng-model="locationInfo.longitude" ng-change="resetDropzone()">
+                    <input type="number" ng-model="locationInfo.longitude" ng-change="onCoordinatesChanged()">
                 </label>
             </div>
-            <button class="button button-full button-positive" ng-click="saveChanges()">
+            <button class="button button-full button-positive" ng-click="saveChanges()" ng-disabled="disableSaveButton">
                 Update My Location
             </button>
         </div>

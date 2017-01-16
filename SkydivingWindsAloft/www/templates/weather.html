@@ -1,5 +1,8 @@
 <ion-view view-title="Weather">
     <ion-nav-buttons side="right" ng-show="weatherLoaded">
+        <button class="button" ng-click="gotoLocationSettings();" style="margin-left: 10px">
+            <i class="icon ion-plane"></i>
+        </button>
         <button class="button" ng-click="reloadWeather();" style="margin-left: 10px">
             <i class="icon ion-refresh"></i>
         </button>
@@ -35,17 +38,17 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="list" ng-hide="weatherLoaded">
             <div class="card">
                 <div class="item item-text-wrap">
                     Please open My Location and specify your dropzone or coordinates.
                 </div>
-                
+
                 <button class="button button-full button-positive" ng-click="gotoLocationSettings()">
                     Go to My Location
                 </button>
             </div>
         </div>
-</ion-content>
+    </ion-content>
 </ion-view>

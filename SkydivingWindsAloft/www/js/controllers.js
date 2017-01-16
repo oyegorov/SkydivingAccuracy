@@ -81,13 +81,15 @@ angular.module('starter.controllers', [])
             $scope.locationInfo.dropzoneInfo = dropzone.address;
             $scope.locationInfo.dropzoneName = dropzone.name;
 
+            $scope.disableSaveButton = false;
             $ionicLoading.hide();
         });
     };
 
-    $scope.resetDropzone = function() {
+    $scope.onCoordinatesChanged = function() {
         $scope.locationInfo.dropzoneName = null;
         $scope.locationInfo.dropzoneInfo = null;
+        $scope.disableSaveButton = false;
     };
 
     $scope.findDropzone = function () {
@@ -131,6 +133,7 @@ angular.module('starter.controllers', [])
             : {
                 dropzoneSearchPattern: ''
             };
+        $scope.disableSaveButton = true;
     });
 })
 
