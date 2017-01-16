@@ -21,11 +21,18 @@ angular.module('starter.controllers', [])
 })
 
 .factory('settingsService', function () {
+    var locationInfoKey = 'locationInfo';
+    var unitsSettingsKey = 'unitsSettings';
+    
+    var defaultTemperatureUnits = 'Celsius';
+    var defaultWindSpeedUnits = 'MPH';
+    var defaultAltitudeUnits = 'Feet';
+
     var storage = window.localStorage;
 
     return {
         loadLocationInfo: function () {
-            var serializedSettings = storage.getItem('locationInfo');
+            var serializedSettings = storage.getItem(locationInfoKey);
             if (serializedSettings != null)
                 return JSON.parse(serializedSettings);
 
@@ -33,7 +40,23 @@ angular.module('starter.controllers', [])
         },
 
         saveLocationInfo: function(locationInfo) {
-            storage.setItem('locationInfo', JSON.stringify(locationInfo));
+            storage.setItem(locationInfoKey, JSON.stringify(locationInfo));
+        },
+
+        loadUnitsSettings: function() {
+            var serializedSettings = storage.getItem(unitsSettingsKey);
+            if (serializedSettings != null)
+                return JSON.parse(serializedSettings);
+
+            return {
+                'temperatureUnits': defaultTemperatureUnits,
+                'windSpeedUnits': defaultWindSpeedUnits,
+                'altitudeUnits': defaultAltitudeUnits
+            };
+        },
+
+        saveUnitsSettings: function (unitsSettings) {
+            storage.setItem(unitsSettingsKey, JSON.stringify(unitsSettings));
         }
     }
 })
@@ -75,10 +98,15 @@ angular.module('starter.controllers', [])
 
 .controller('SettingsController', function ($scope, settingsService) {
     $scope.temperatureUnits = ['Celsius', 'Fahrenheit'];
-    $scope.windsSpeedUnits = ['KM/H', 'M/S', 'MPH', 'KNOTS'];
+    $scope.windSpeedUnits = ['KM/H', 'M/S', 'MPH', 'KNOTS'];
     $scope.altitudeUnits = ['Feet', 'Meters'];
 
+    $scope.onUnitsChanged = function() {
+        settingsService.saveUnitsSettings($scope.unitsSettings);
+    }
+
     $scope.$on('$ionicView.beforeEnter', function () {
+        $scope.unitsSettings = settingsService.loadUnitsSettings();
     });
 })
 
