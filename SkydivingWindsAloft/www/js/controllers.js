@@ -24,7 +24,7 @@ angular.module('starter.controllers', [])
     var weather = [];
 
     return {
-        getWeather: function (longitude, latitude) {
+        getWeather: function (latitude, longitude) {
             return $http.get("http://vps96817.vps.ovh.ca/api/weather?longitude=" + longitude + "&latitude=" + latitude).then(function (response) {
                 weather = response.data;
                 return weather;
@@ -54,7 +54,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('LocationController', function ($scope, $ionicLoading, dropzoneService) {
+.controller('LocationController', function ($scope, $ionicLoading, $ionicPopup, dropzoneService) {
     var getDropzoneFromService = function(position, nameFilter) {
         dropzoneService.getDropzone(position, nameFilter).then(function (dropzone) {
             $scope.latitude = dropzone.latitude;
@@ -90,12 +90,32 @@ angular.module('starter.controllers', [])
             { enableHighAccuracy: true, timeout: 3000 });
     };
 
+    $scope.saveChanges = function() {
+        if (!$scope.latitude || !$scope.longitude) {
+            $ionicPopup.alert({
+                title: 'Could not save',
+                template: 'Location was not specified.'
+            });
+
+            return;
+        }
+
+        var storage = window.localStorage;
+        storage.setItem('locationName', $scope.dropzoneName == null ? '(' + $scope.latitude + '; ' + $scope.longitude + ')' : $scope.dropzoneName);
+        storage.setItem('latitude', $scope.latitude.toString());
+        storage.setItem('longitude', $scope.longitude.toString());
+    };
+
     $scope.dropzoneSearchPattern = "";
 })
 
-.controller('WeatherController', function ($scope, weatherService) {
+.controller('WeatherController', function ($scope, $location, $ionicLoading, weatherService) {
     $scope.loadWeather = function () {
-        weatherService.getWeather(-79.6115, 44.3009).then(function (weather) {
+        $ionicLoading.show({
+            template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+        });
+
+        weatherService.getWeather(44.238, -79.641).then(function (weather) {
             function formatBearing(bearing) {
                 if (bearing < 0 && bearing > -180) {
                     bearing = 360.0 + bearing;
@@ -119,7 +139,16 @@ angular.module('starter.controllers', [])
 
             $scope.windsAloftRecords = windsAloftRecords;
             $scope.groundWeather = weather.groundWeather;
+
+            $ionicLoading.hide();
         });
+    }
+
+    var storage = window.localStorage;
+    $scope.locationName = storage.getItem('locationName');
+    $scope.latitude = storage.getItem('latitude');
+    $scope.longitude = storage.getItem('longitude');
+    if ($scope.locationName === null || $scope.latitude === null || $scope.longitude == null) {
     }
 
     $scope.loadWeather();

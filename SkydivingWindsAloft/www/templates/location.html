@@ -17,7 +17,7 @@
                 </div>
                 <div class="item item-text-wrap">
                     <div>{{dropzoneName == null ? 'No dropzone selected' : dropzoneName}}</div>
-                    <div style="font-size: 80%">{{dropzoneInfo == null ? 'You can search for the DZ or enter coordinates manually' : dropzoneInfo}}</div>
+                    <div style="font-size: 80%">{{dropzoneInfo == null ? "Hint: if you leave Dropzone Name empty, the application will find the nearest DZ for you" : dropzoneInfo}}</div>
                 </div>
             </div>
             <div class="list">
@@ -33,7 +33,7 @@
                     <input type="number" ng-model="longitude" ng-change="resetDropzone()">
                 </label>
             </div>
-            <button class="button button-full button-positive">
+            <button class="button button-full button-positive" ng-click="saveChanges()">
                 Save changes
             </button>
         </div>
