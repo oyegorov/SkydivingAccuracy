@@ -59,7 +59,7 @@ angular.module('starter.controllers', [])
         dropzoneService.getDropzone(position, nameFilter).then(function (dropzone) {
             $scope.latitude = dropzone.latitude;
             $scope.longitude = dropzone.longitude;
-            $scope.dropzoneInfo = dropzone.name + "<br>" + dropzone.address;
+            $scope.dropzoneInfo = dropzone.address;
             $scope.dropzoneName = dropzone.name;
 
             $ionicLoading.hide();
@@ -71,8 +71,8 @@ angular.module('starter.controllers', [])
     };
 
     $scope.resetDropzone = function() {
-        $scope.dropzoneInfo = "No dropzone selected";
-        $scope.dropzoneSearchPattern = "";
+        $scope.dropzoneName = null;
+        $scope.dropzoneInfo = null;
     };
 
     $scope.findDropzone = function () {
