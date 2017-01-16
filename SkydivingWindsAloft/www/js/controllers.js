@@ -57,22 +57,18 @@ angular.module('starter.controllers', [])
 .controller('LocationController', function ($scope, $ionicLoading, $ionicPopup, dropzoneService) {
     var getDropzoneFromService = function(position, nameFilter) {
         dropzoneService.getDropzone(position, nameFilter).then(function (dropzone) {
-            $scope.latitude = dropzone.latitude;
-            $scope.longitude = dropzone.longitude;
-            $scope.dropzoneInfo = dropzone.address;
-            $scope.dropzoneName = dropzone.name;
+            $scope.locationInfo.latitude = dropzone.latitude;
+            $scope.locationInfo.longitude = dropzone.longitude;
+            $scope.locationInfo.dropzoneInfo = dropzone.address;
+            $scope.locationInfo.dropzoneName = dropzone.name;
 
             $ionicLoading.hide();
         });
     };
 
-    $scope.dropzoneSearchPatternChange = function(obj) {
-        $scope.dropzoneSearchPattern = obj.dropzoneSearchPattern;
-    };
-
     $scope.resetDropzone = function() {
-        $scope.dropzoneName = null;
-        $scope.dropzoneInfo = null;
+        $scope.locationInfo.dropzoneName = null;
+        $scope.locationInfo.dropzoneInfo = null;
     };
 
     $scope.findDropzone = function () {
@@ -82,18 +78,18 @@ angular.module('starter.controllers', [])
 
         navigator.geolocation.getCurrentPosition(
             function(position) {
-                getDropzoneFromService(position, $scope.dropzoneSearchPattern);
+                getDropzoneFromService(position, $scope.locationInfo.dropzoneSearchPattern);
             },
             function(error) {
-                getDropzoneFromService(null, $scope.dropzoneSearchPattern);
+                getDropzoneFromService(null, $scope.locationInfo.dropzoneSearchPattern);
             },
             { enableHighAccuracy: true, timeout: 3000 });
     };
 
     $scope.saveChanges = function() {
-        if (!$scope.latitude || !$scope.longitude) {
+        if (!$scope.locationInfo.latitude || !$scope.locationInfo.longitude) {
             $ionicPopup.alert({
-                title: 'Could not save',
+                title: 'Save failed',
                 template: 'Location was not specified.'
             });
 
@@ -101,12 +97,14 @@ angular.module('starter.controllers', [])
         }
 
         var storage = window.localStorage;
-        storage.setItem('locationName', $scope.dropzoneName == null ? '(' + $scope.latitude + '; ' + $scope.longitude + ')' : $scope.dropzoneName);
-        storage.setItem('latitude', $scope.latitude.toString());
-        storage.setItem('longitude', $scope.longitude.toString());
+        storage.setItem('locationName', $scope.locationInfo.dropzoneName == null ? '(' + $scope.locationInfo.latitude + '; ' + $scope.locationInfo.longitude + ')' : $scope.locationInfo.dropzoneName);
+        storage.setItem('latitude', $scope.locationInfo.latitude.toString());
+        storage.setItem('longitude', $scope.locationInfo.longitude.toString());
     };
 
-    $scope.dropzoneSearchPattern = "";
+    $scope.locationInfo = {
+        dropzoneSearchPattern: ''
+    };
 })
 
 .controller('WeatherController', function ($scope, $location, $ionicLoading, weatherService) {

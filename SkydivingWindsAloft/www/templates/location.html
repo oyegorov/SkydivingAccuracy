@@ -4,7 +4,7 @@
             <div class="list">
                 <div class="item item-input-inset">
                     <label class="item-input-wrapper">
-                        <input type="search" placeholder="Dropzone Name" ng-change="dropzoneSearchPatternChange(this)" ng-model="dropzoneSearchPattern">
+                        <input type="search" placeholder="Dropzone Name" ng-model="locationInfo.dropzoneSearchPattern">
                     </label>
                     <button class="button button-small" ng-click="findDropzone()">
                         <i class="icon ion-location"></i>&nbsp;Find DZ&nbsp;
@@ -16,8 +16,8 @@
                     Dropzone Information
                 </div>
                 <div class="item item-text-wrap">
-                    <div>{{dropzoneName == null ? 'No dropzone selected' : dropzoneName}}</div>
-                    <div style="font-size: 80%">{{dropzoneInfo == null ? "Hint: if you leave Dropzone Name empty, the application will find the nearest DZ for you" : dropzoneInfo}}</div>
+                    <div>{{locationInfo.dropzoneName == null ? 'No dropzone selected' : locationInfo.dropzoneName}}</div>
+                    <div style="font-size: 80%">{{locationInfo.dropzoneInfo == null ? "Hint: if you leave Dropzone Name empty, the application will find the nearest DZ for you" : locationInfo.dropzoneInfo}}</div>
                 </div>
             </div>
             <div class="list">
@@ -26,11 +26,11 @@
                 </div>
                 <label class="item item-input">
                     <span class="input-label">Latitude</span>
-                    <input type="number" ng-model="latitude" ng-change="resetDropzone()">
+                    <input type="number" ng-model="locationInfo.latitude" ng-change="resetDropzone()">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Longitude</span>
-                    <input type="number" ng-model="longitude" ng-change="resetDropzone()">
+                    <input type="number" ng-model="locationInfo.longitude" ng-change="resetDropzone()">
                 </label>
             </div>
             <button class="button button-full button-positive" ng-click="saveChanges()">
