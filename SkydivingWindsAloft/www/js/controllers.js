@@ -72,7 +72,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('LocationController', function ($scope, $ionicLoading, $ionicPopup, dropzoneService, settingsService) {
+.controller('LocationController', function ($scope, $ionicLoading, $ionicPopup, $ionicHistory, $state, dropzoneService, settingsService) {
     var getDropzoneFromService = function(position, nameFilter) {
         dropzoneService.getDropzone(position, nameFilter).then(function (dropzone) {
             $scope.locationInfo.latitude = dropzone.latitude;
@@ -115,6 +115,12 @@ angular.module('starter.controllers', [])
         }
 
         settingsService.saveLocationInfo($scope.locationInfo);
+
+        $ionicHistory.nextViewOptions({
+            disableBack: true
+        });
+
+        $state.transitionTo('app.weather');
     };
 
     $scope.$on('$ionicView.beforeEnter', function () {
@@ -127,13 +133,13 @@ angular.module('starter.controllers', [])
     });
 })
 
-.controller('WeatherController', function ($scope, $location, $ionicLoading, weatherService) {
-    $scope.loadWeather = function () {
+.controller('WeatherController', function ($scope, $state, $ionicLoading, $ionicHistory, weatherService, settingsService) {
+    var loadWeather = function (latitude, longitude) {
         $ionicLoading.show({
             template: '<p>Loading...</p><ion-spinner></ion-spinner>'
         });
 
-        weatherService.getWeather(44.238, -79.641).then(function (weather) {
+        weatherService.getWeather(latitude, longitude).then(function (weather) {
             function formatBearing(bearing) {
                 if (bearing < 0 && bearing > -180) {
                     bearing = 360.0 + bearing;
@@ -157,17 +163,38 @@ angular.module('starter.controllers', [])
 
             $scope.windsAloftRecords = windsAloftRecords;
             $scope.groundWeather = weather.groundWeather;
+            $scope.weatherLoaded = true;            
 
             $ionicLoading.hide();
         });
     }
+    
+    $scope.reloadWeather = function() {
+        var locationInfo = settingsService.loadLocationInfo();
+        
+        if (locationInfo != null) {
+            if (locationInfo.dropzoneName != null)
+                $scope.locationName = locationInfo.dropzoneName;
+            else 
+                $scope.locationName = '(' + locationInfo.latitude + '; ' + locationInfo.longitude + ')';
+            
+            loadWeather(locationInfo.latitude, locationInfo.longitude);
 
-    var storage = window.localStorage;
-    $scope.locationName = storage.getItem('locationName');
-    $scope.latitude = storage.getItem('latitude');
-    $scope.longitude = storage.getItem('longitude');
-    if ($scope.locationName === null || $scope.latitude === null || $scope.longitude == null) {
+        } else {
+            $scope.weatherLoaded = false;
+            $scope.dropzoneName = null;
+        }
     }
 
-    $scope.loadWeather();
+    $scope.gotoLocationSettings = function () {
+        $ionicHistory.nextViewOptions({
+            disableBack: true
+        });
+        
+        $state.transitionTo('app.location');
+    }
+
+    $scope.$on('$ionicView.beforeEnter', function () {
+        $scope.reloadWeather();
+    });
 });
