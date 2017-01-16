@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
@@ -12,13 +13,17 @@ namespace SkydivingAccuracyBackend.Services.Controllers
     public class DropzonesController
     {
         [HttpGet("nearest")]
-        public async Task<IActionResult> Get([FromQuery]double longitude, [FromQuery]double latitude)
+        public async Task<IActionResult> Get([FromQuery]double longitude, [FromQuery]double latitude, [FromQuery] string name)
         {
             double distance = double.MaxValue;
             var location = new GeoCoordinate(latitude, longitude);
             Dropzone closestDropzone = null;
 
-            foreach (var dropzone in Dropzones.GetAll())
+            IEnumerable<Dropzone> dropzones = Dropzones.GetAll();
+            if (name != null)
+                dropzones = dropzones.Where(d => d.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) != -1);
+
+            foreach (var dropzone in dropzones)
             {
                 if (dropzone.Latitude == null || dropzone.Longitude == null)
                     continue;
@@ -39,7 +44,7 @@ namespace SkydivingAccuracyBackend.Services.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery]string name, [FromQuery]int? take)
         {
-            if (String.IsNullOrEmpty(name) || name.Length < 3)
+            if (String.IsNullOrEmpty(name))
                 return new EmptyResult();
 
             var matchingDropzones =
