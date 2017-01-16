@@ -288,10 +288,6 @@ angular.module('starter.controllers', [])
     }
 
     $scope.gotoLocationSettings = function () {
-        $ionicHistory.nextViewOptions({
-            disableBack: true
-        });
-        
         $state.transitionTo('app.location');
     }
 
