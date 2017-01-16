@@ -25,8 +25,8 @@ angular.module('starter.controllers', [])
 
     return {
         getWeather: function (longitude, latitude) {
-            return $http.get("http://vps96817.vps.ovh.ca/api/weather/currentWeather?longitude=" + longitude + "&latitude=" + latitude).then(function (response) {
-                weather = response;
+            return $http.get("http://vps96817.vps.ovh.ca/api/weather?longitude=" + longitude + "&latitude=" + latitude).then(function (response) {
+                weather = response.data;
                 return weather;
             }, function (error) {
                 //there was an error fetching from the server
@@ -35,9 +35,67 @@ angular.module('starter.controllers', [])
     }
 })
 
+.factory('dropzoneService', function ($http) {
+    var dropzone = null;
+
+    return {
+        getDropzone: function (position, nameFilter) {
+            var url = "http://vps96817.vps.ovh.ca/api/dropzones/nearest?name=" + nameFilter;
+            if (position != null)
+                url += "&longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude;
+
+            return $http.get(url).then(function (response) {
+                dropzone = response.data;
+                return dropzone;
+            }, function (error) {
+                //there was an error fetching from the server
+            });
+        }
+    }
+})
+
+.controller('LocationController', function ($scope, $ionicLoading, dropzoneService) {
+    var getDropzoneFromService = function(position, nameFilter) {
+        dropzoneService.getDropzone(position, nameFilter).then(function (dropzone) {
+            $scope.latitude = dropzone.latitude;
+            $scope.longitude = dropzone.longitude;
+            $scope.dropzoneInfo = dropzone.name + "<br>" + dropzone.address;
+            $scope.dropzoneName = dropzone.name;
+
+            $ionicLoading.hide();
+        });
+    };
+
+    $scope.dropzoneSearchPatternChange = function(obj) {
+        $scope.dropzoneSearchPattern = obj.dropzoneSearchPattern;
+    };
+
+    $scope.resetDropzone = function() {
+        $scope.dropzoneInfo = "No dropzone selected";
+        $scope.dropzoneSearchPattern = "";
+    };
+
+    $scope.findDropzone = function () {
+        $ionicLoading.show({
+            template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+        });
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                getDropzoneFromService(position, $scope.dropzoneSearchPattern);
+            },
+            function(error) {
+                getDropzoneFromService(null, $scope.dropzoneSearchPattern);
+            },
+            { enableHighAccuracy: true, timeout: 3000 });
+    };
+
+    $scope.dropzoneSearchPattern = "";
+})
+
 .controller('WeatherController', function ($scope, weatherService) {
     $scope.loadWeather = function () {
-        weatherService.getWeather(-79.6115, 44.3009).then(function (response) {
+        weatherService.getWeather(-79.6115, 44.3009).then(function (weather) {
             function formatBearing(bearing) {
                 if (bearing < 0 && bearing > -180) {
                     bearing = 360.0 + bearing;
@@ -53,14 +111,14 @@ angular.module('starter.controllers', [])
                 return bearing + "\u00b0 " + cardinal;
             };
 
-            var windsAloftRecords = response.data.windsAloft.windsAloftRecords;
+            var windsAloftRecords = weather.windsAloft.windsAloftRecords;
             for (var i = 0; i < windsAloftRecords.length; i++) {
                 windsAloftRecords[i].bearing = formatBearing(windsAloftRecords[i].windHeading);
             }
-            response.data.groundWeather.bearing = formatBearing(response.data.groundWeather.windHeading);
+            weather.groundWeather.bearing = formatBearing(weather.groundWeather.windHeading);
 
             $scope.windsAloftRecords = windsAloftRecords;
-            $scope.groundWeather = response.data.groundWeather;
+            $scope.groundWeather = weather.groundWeather;
         });
     }
 

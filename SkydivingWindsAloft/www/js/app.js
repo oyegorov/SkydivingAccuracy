@@ -44,7 +44,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         url: '/location',
         views: {
             'menuContent': {
-                templateUrl: 'templates/location.html'
+                templateUrl: 'templates/location.html',
+                controller: 'LocationController'
             }
         }
     })
