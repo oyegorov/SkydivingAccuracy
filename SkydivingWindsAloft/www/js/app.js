@@ -40,11 +40,11 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
     })
 
-    .state('app.settings', {
-        url: '/settings',
+    .state('app.location', {
+        url: '/location',
         views: {
             'menuContent': {
-                templateUrl: 'templates/settings.html'
+                templateUrl: 'templates/location.html'
             }
         }
     })
