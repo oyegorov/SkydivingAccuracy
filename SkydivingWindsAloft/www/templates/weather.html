@@ -20,21 +20,22 @@
                 <div class="item item-icon-left">
                     <div class="icon ion-arrow-up-a" rotate degrees="groundWeather.windHeading" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     <b>{{groundWeather.bearing}}</b>
-                    <p>Wind speed: {{groundWeather.windSpeed * 1.852 | number:0}} km/h ({{groundWeather.windSpeed * 1.15 | number:0}} mph)
-                    <p>Wind gust: {{groundWeather.windGust * 1.852 | number:0}} km/h ({{groundWeather.windGust * 1.15 | number:0}} mph)
-                    <p>Temperature: {{groundWeather.temperature}}&deg; C ({{groundWeather.temperature * 1.8 + 32 | number:0}}&deg; F)
+                    <p>Wind speed: {{unitsService.convertWindSpeed(groundWeather.windSpeed, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
+                    <p>Wind gust: {{unitsService.convertWindSpeed(groundWeather.windGust, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
+                    <p>Temperature: {{unitsService.convertTemperature(groundWeather.temperature, unitsSettings.temperatureUnits) | number:0}}&deg; {{ unitsSettings.temperatureUnits }}
                 </div>
             </div>
 
             <div class="card" ng-repeat="windsAloftRecord in windsAloftRecords">
                 <div class="item item-divider">
-                    {{windsAloftRecord.altitude}} feet
+                    {{unitsService.convertAltitude(windsAloftRecord.altitude, unitsSettings.altitudeUnits)}} {{unitsSettings.altitudeUnits}}
                 </div>
                 <div class="item item-icon-left">
                     <div class="icon ion-arrow-up-a" rotate degrees="windsAloftRecord.windHeading" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     <b>{{windsAloftRecord.bearing}}</b>
-                    <p>Wind speed: {{windsAloftRecord.windSpeed * 1.852 | number:0}} km/h ({{windsAloftRecord.windSpeed * 1.15 | number:0}} mph)
-                    <p ng-show="windsAloftRecord.temperature != null">Temperature: {{windsAloftRecord.temperature}}&deg; C ({{windsAloftRecord.temperature * 1.8 + 32 | number:0}}&deg; F)
+
+                    <p>Wind speed: {{unitsService.convertWindSpeed(windsAloftRecord.windSpeed, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
+                    <p ng-show="windsAloftRecord.temperature != null">Temperature: {{unitsService.convertTemperature(windsAloftRecord.temperature, unitsSettings.temperatureUnits) | number:0}}&deg; {{ unitsSettings.temperatureUnits }}</p>
                 </div>
             </div>
         </div>

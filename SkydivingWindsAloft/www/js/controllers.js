@@ -20,14 +20,9 @@ angular.module('starter.controllers', [])
     }
 })
 
-.factory('settingsService', function () {
+.factory('settingsService', function (unitsService) {
     var locationInfoKey = 'locationInfo';
     var unitsSettingsKey = 'unitsSettings';
-    
-    var defaultTemperatureUnits = 'Celsius';
-    var defaultWindSpeedUnits = 'MPH';
-    var defaultAltitudeUnits = 'Feet';
-
     var storage = window.localStorage;
 
     return {
@@ -48,15 +43,75 @@ angular.module('starter.controllers', [])
             if (serializedSettings != null)
                 return JSON.parse(serializedSettings);
 
-            return {
-                'temperatureUnits': defaultTemperatureUnits,
-                'windSpeedUnits': defaultWindSpeedUnits,
-                'altitudeUnits': defaultAltitudeUnits
-            };
+            return unitsService.getDefaultUnits();
         },
 
         saveUnitsSettings: function (unitsSettings) {
             storage.setItem(unitsSettingsKey, JSON.stringify(unitsSettings));
+        }
+    }
+})
+
+.factory('unitsService', function () {
+    var TEMP_CELSIUS = 'C';
+    var TEMP_FAHRENHEIT = 'F';
+    var WS_KMPH = 'km/h';
+    var WS_MPS = 'm/s';
+    var WS_MPH = 'mph';
+    var WS_KNOTS = 'knots';
+    var ALT_FEET = 'feet';
+    var ALT_METERS = 'meters';
+
+    return {
+        getDefaultUnits() {
+            return {
+                'temperatureUnits': TEMP_CELSIUS,
+                'windSpeedUnits': WS_MPH,
+                'altitudeUnits': ALT_FEET
+            };
+        },
+
+        getTemperatureUnits: function() {
+            return [TEMP_CELSIUS, TEMP_FAHRENHEIT];
+        },
+
+        getWindSpeedUnits: function() {
+            return [WS_KMPH, WS_MPS, WS_MPH, WS_KNOTS];
+        },
+
+        getAltitudeUnits: function() {
+            return [ALT_FEET, ALT_METERS];
+        },
+
+        convertTemperature: function (value, toUnits) {
+            switch (toUnits) {
+                case TEMP_FAHRENHEIT:
+                    return value * 9 / 5 + 32;
+                default:
+                    return value;
+            }
+        },
+
+        convertWindSpeed: function (value, toUnits) {
+            switch (toUnits) {
+                case WS_KMPH:
+                    return value * 1.852;
+                case WS_MPS:
+                    return value * 0.514444;
+                case WS_MPH:
+                    return value * 1.151;
+                default:
+                    return value;
+            }
+        },
+
+        convertAltitude: function(value, toUnits) {
+            switch (toUnits) {
+                case ALT_METERS:
+                    return value / 3;
+                default:
+                    return value;
+            }
         }
     }
 })
@@ -96,10 +151,10 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('SettingsController', function ($scope, settingsService) {
-    $scope.temperatureUnits = ['Celsius', 'Fahrenheit'];
-    $scope.windSpeedUnits = ['KM/H', 'M/S', 'MPH', 'KNOTS'];
-    $scope.altitudeUnits = ['Feet', 'Meters'];
+.controller('SettingsController', function ($scope, settingsService, unitsService) {
+    $scope.temperatureUnits = unitsService.getTemperatureUnits();
+    $scope.windSpeedUnits = unitsService.getWindSpeedUnits();
+    $scope.altitudeUnits = unitsService.getAltitudeUnits();
 
     $scope.onUnitsChanged = function() {
         settingsService.saveUnitsSettings($scope.unitsSettings);
@@ -174,7 +229,7 @@ angular.module('starter.controllers', [])
     });
 })
 
-.controller('WeatherController', function ($scope, $state, $ionicLoading, $ionicHistory, weatherService, settingsService) {
+.controller('WeatherController', function ($scope, $state, $ionicLoading, $ionicHistory, weatherService, settingsService, unitsService) {
     var loadWeather = function (latitude, longitude) {
         $ionicLoading.show({
             template: '<p>Loading...</p><ion-spinner></ion-spinner>'
@@ -242,5 +297,7 @@ angular.module('starter.controllers', [])
 
     $scope.$on('$ionicView.beforeEnter', function () {
         $scope.reloadWeather();
+        $scope.unitsSettings = settingsService.loadUnitsSettings();
+        $scope.unitsService = unitsService;
     });
 });
