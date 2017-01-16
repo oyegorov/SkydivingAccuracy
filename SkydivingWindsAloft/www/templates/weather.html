@@ -15,7 +15,7 @@
                     Ground level
                 </div>
                 <div class="item item-icon-left">
-                    <div class="icon ion-arrow-up-a" rotate degrees="{{groundWeather.windHeading}}" style="float: left; margin-right: 5px; margin-top: 0px"></div>
+                    <div class="icon ion-arrow-up-a" rotate degrees="groundWeather.windHeading" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     <b>{{groundWeather.bearing}}</b>
                     <p>Wind speed: {{groundWeather.windSpeed * 1.852 | number:0}} km/h ({{groundWeather.windSpeed * 1.15 | number:0}} mph)
                     <p>Wind gust: {{groundWeather.windGust * 1.852 | number:0}} km/h ({{groundWeather.windGust * 1.15 | number:0}} mph)
@@ -28,7 +28,7 @@
                     {{windsAloftRecord.altitude}} feet
                 </div>
                 <div class="item item-icon-left">
-                    <div class="icon ion-arrow-up-a" rotate degrees="{{windsAloftRecord.windHeading}}" style="float: left; margin-right: 5px; margin-top: 0px"></div>
+                    <div class="icon ion-arrow-up-a" rotate degrees="windsAloftRecord.windHeading" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     <b>{{windsAloftRecord.bearing}}</b>
                     <p>Wind speed: {{windsAloftRecord.windSpeed * 1.852 | number:0}} km/h ({{windsAloftRecord.windSpeed * 1.15 | number:0}} mph)
                     <p ng-show="windsAloftRecord.temperature != null">Temperature: {{windsAloftRecord.temperature}}&deg; C ({{windsAloftRecord.temperature * 1.8 + 32 | number:0}}&deg; F)
