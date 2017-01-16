@@ -47,6 +47,7 @@ angular.module('starter.controllers', [])
                 weather = response.data;
                 return weather;
             }, function (error) {
+                return null;
                 //there was an error fetching from the server
             });
         }
@@ -155,11 +156,16 @@ angular.module('starter.controllers', [])
                 return bearing + "\u00b0 " + cardinal;
             };
 
-            var windsAloftRecords = weather.windsAloft.windsAloftRecords;
-            for (var i = 0; i < windsAloftRecords.length; i++) {
-                windsAloftRecords[i].bearing = formatBearing(windsAloftRecords[i].windHeading);
+            var windsAloftRecords = [];
+
+            if (weather.windsAloft != null && weather.windsAloft.windsAloftRecords != null) {
+                windsAloftRecords = weather.windsAloft.windsAloftRecords;
+                for (var i = 0; i < windsAloftRecords.length; i++) {
+                    windsAloftRecords[i].bearing = formatBearing(windsAloftRecords[i].windHeading);
+                }
             }
-            weather.groundWeather.bearing = formatBearing(weather.groundWeather.windHeading);
+            if (weather.groundWeather != null)
+                weather.groundWeather.bearing = formatBearing(weather.groundWeather.windHeading);
 
             $scope.windsAloftRecords = windsAloftRecords;
             $scope.groundWeather = weather.groundWeather;
