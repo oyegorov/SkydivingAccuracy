@@ -15,7 +15,7 @@ namespace SkydivingAccuracyBackend.Services.Controllers
         private const int CutoffDistanceInKms = 800;
 
         [HttpGet("")]
-        public async Task<IActionResult> Get([FromQuery]double longitude, [FromQuery]double latitude)
+        public async Task<IActionResult> Get([FromQuery]double latitude, [FromQuery]double longitude)
         {
             DateTime requestedDateTime = DateTime.UtcNow;
 

@@ -13,15 +13,37 @@ namespace SkydivingAccuracyBackend.Services.Controllers
     public class DropzonesController
     {
         [HttpGet("nearest")]
-        public async Task<IActionResult> Get([FromQuery]double longitude, [FromQuery]double latitude, [FromQuery] string name)
+        public async Task<IActionResult> Get([FromQuery]double? latitude, [FromQuery]double? longitude, [FromQuery] string name)
+        {
+            IEnumerable<Dropzone> dropzones = Dropzones.GetAll();
+            if (name != null)
+                dropzones = dropzones.Where(d => d.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) != -1);
+
+            if (latitude != null && longitude != null)
+                return new OkObjectResult(GetNearest(dropzones, latitude.Value, longitude.Value));
+
+            return new OkObjectResult(dropzones.OrderBy(d => d.Name).FirstOrDefault());
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> Get([FromQuery]string name, [FromQuery]int? take)
+        {
+            if (String.IsNullOrEmpty(name))
+                return new EmptyResult();
+
+            var matchingDropzones =
+                Dropzones.GetAll().Where(d => d.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) != -1);
+            if (take != null)
+                matchingDropzones = matchingDropzones.Take(take.Value);
+
+            return new OkObjectResult(matchingDropzones);
+        }
+
+        private Dropzone GetNearest(IEnumerable<Dropzone> dropzones, double latitude, double longitude)
         {
             double distance = double.MaxValue;
             var location = new GeoCoordinate(latitude, longitude);
             Dropzone closestDropzone = null;
-
-            IEnumerable<Dropzone> dropzones = Dropzones.GetAll();
-            if (name != null)
-                dropzones = dropzones.Where(d => d.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) != -1);
 
             foreach (var dropzone in dropzones)
             {
@@ -38,21 +60,7 @@ namespace SkydivingAccuracyBackend.Services.Controllers
                 }
             }
 
-            return new OkObjectResult(closestDropzone);
-        }
-
-        [HttpGet("")]
-        public async Task<IActionResult> Get([FromQuery]string name, [FromQuery]int? take)
-        {
-            if (String.IsNullOrEmpty(name))
-                return new EmptyResult();
-
-            var matchingDropzones =
-                Dropzones.GetAll().Where(d => d.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) != -1);
-            if (take != null)
-                matchingDropzones = matchingDropzones.Take(take.Value);
-
-            return new OkObjectResult(matchingDropzones);
+            return closestDropzone;
         }
     }
 }
