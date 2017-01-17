@@ -1,16 +1,18 @@
 <ion-view view-title="My Location">
     <ion-content>
         <div class="list">
-            <div class="list">
-                <div class="item item-input-inset">
-                    <label class="item-input-wrapper">
-                        <input type="search" placeholder="Enter DZ Name Here" ng-model="locationInfo.dropzoneSearchPattern" onsearch="findDropzone()">
-                    </label>
-                    <button class="button button-small" ng-click="findDropzone()">
-                        <i class="icon ion-location"></i>&nbsp;Find DZ&nbsp;
-                    </button>
+            <form ng-submit="findDropzone()">
+                <div class="list">
+                    <div class="item item-input-inset">
+                        <label class="item-input-wrapper">
+                            <input type="search" placeholder="Enter DZ Name Here" ng-model="locationInfo.dropzoneSearchPattern" onsearch="findDropzone()">
+                        </label>
+                        <button class="button button-small" ng-click="findDropzone()">
+                            <i class="icon ion-location"></i>&nbsp;Find DZ&nbsp;
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
             <div class="list">
                 <div class="item item-divider">
                     Dropzone Information
