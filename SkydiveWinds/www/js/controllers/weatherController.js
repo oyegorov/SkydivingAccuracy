@@ -16,12 +16,31 @@
                 if (weather != null) {
                     var windsAloftRecords = [];
 
+                    $scope.requestedOn = weather.requestedOn;
+
                     if (weather.windsAloft != null && weather.windsAloft.windsAloftRecords != null) {
+                        if (weather.windsAloft.airport != null) {
+                            $scope.windsAloftAirport = weather.windsAloft.airport.name;
+                            $scope.windsAloftSource = weather.windsAloft.source;
+                            $scope.windsAloftUpdatedOn = weather.windsAloft.updatedOn;
+                            $scope.windsAloftValidFrom = weather.windsAloft.validFrom;
+                            $scope.windsAloftValidTo = weather.windsAloft.validTo;
+                        } else {
+                            $scope.windsAloftAirport = null;
+                        }
+
                         windsAloftRecords = weather.windsAloft.windsAloftRecords;
                         for (var i = 0; i < windsAloftRecords.length; i++) {
                             windsAloftRecords[i].bearing = windsService.formatBearing(windsAloftRecords[i].windHeading);
                         }
+                    } else {
+                        $scope.windsAloftAirport = null;
+                        $scope.windsAloftSource = null;
+                        $scope.windsAloftUpdatedOn = null;
+                        $scope.windsAloftValidFrom = null;
+                        $scope.windsAloftValidTo = null;
                     }
+
                     if (weather.groundWeather != null)
                         weather.groundWeather.bearing = windsService.formatBearing(weather.groundWeather.windHeading);
 
