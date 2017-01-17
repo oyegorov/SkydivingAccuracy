@@ -48,6 +48,7 @@
                     $scope.groundWeather = weather.groundWeather;
                     $scope.weatherLoaded = true;
                 } else {
+                    $scope.weatherLoaded = false;
                     $scope.errorLoadingWeather = true;
                 }
 
