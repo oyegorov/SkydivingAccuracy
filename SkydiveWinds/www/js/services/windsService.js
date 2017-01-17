@@ -1,8 +1,8 @@
 ﻿angular.module('starter.controllers')
     .factory('windsService', function () {
         return {
-            formatBearing: function(bearing) {
-                if (bearing == null)
+            formatBearing: function(bearing, windSpeed) {
+                if (bearing == null || (windSpeed == null || windSpeed == 0))
                     return "Calm";
 
                 if (bearing < 0 && bearing > -180) {

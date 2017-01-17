@@ -31,7 +31,7 @@
 
                         windsAloftRecords = weather.windsAloft.windsAloftRecords;
                         for (var i = 0; i < windsAloftRecords.length; i++) {
-                            windsAloftRecords[i].bearing = windsService.formatBearing(windsAloftRecords[i].windHeading);
+                            windsAloftRecords[i].bearing = windsService.formatBearing(windsAloftRecords[i].windHeading, windsAloftRecords[i].windSpeed);
                         }
                     } else {
                         $scope.windsAloftAirport = null;
@@ -42,7 +42,7 @@
                     }
 
                     if (weather.groundWeather != null)
-                        weather.groundWeather.bearing = windsService.formatBearing(weather.groundWeather.windHeading);
+                        weather.groundWeather.bearing = windsService.formatBearing(weather.groundWeather.windHeading, weather.groundWeather.windSpeed);
 
                     $scope.windsAloftRecords = windsAloftRecords;
                     $scope.groundWeather = weather.groundWeather;

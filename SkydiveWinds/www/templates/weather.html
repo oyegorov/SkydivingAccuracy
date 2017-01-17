@@ -42,8 +42,8 @@
                     Ground level
                 </div>
                 <div class="item item-icon-left">
-                    <div ng-style="{'visibility': groundWeather.windSpeed != null ? 'visible' : 'hidden'}">
-                        <div class="icon ion-arrow-up-a" rotate degrees="groundWeather.windHeading" style="float: left; margin-right: 5px; margin-top: 0px"></div>
+                    <div ng-style="{'visibility': (groundWeather.windSpeed != null && groundWeather.windSpeed >= 1 ? 'visible' : 'hidden') }">
+                        <div class="icon ion-arrow-up-a" rotate degrees="groundWeather.windHeading + 180" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     </div>
                     <b>{{groundWeather.bearing}}</b>
                     <p>Wind speed: {{unitsService.convertWindSpeed(groundWeather.windSpeed, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
@@ -57,8 +57,8 @@
                     {{unitsService.convertAltitude(windsAloftRecord.altitude, unitsSettings.altitudeUnits)}} {{unitsSettings.altitudeUnits}}
                 </div>
                 <div class="item item-icon-left">
-                    <div ng-style="{'visibility': windsAloftRecord.windSpeed != null ? 'visible' : 'hidden'}">
-                        <div class="icon ion-arrow-up-a" rotate degrees="windsAloftRecord.windHeading" style="float: left; margin-right: 5px; margin-top: 0px"></div>
+                    <div ng-style="{'visibility': (windsAloftRecord.windSpeed != null && windsAloftRecord.windSpeed >= 1 ? 'visible' : 'hidden')}">
+                        <div class="icon ion-arrow-up-a" rotate degrees="windsAloftRecord.windHeading + 180" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     </div>
                     <b>{{windsAloftRecord.bearing}}</b>
 
