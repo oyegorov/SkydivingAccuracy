@@ -40,6 +40,9 @@
             },
 
             convertWindSpeed: function(value, toUnits) {
+                if (value == null)
+                    value = 0;
+
                 switch (toUnits) {
                 case WS_KMPH:
                     return value * 1.852;

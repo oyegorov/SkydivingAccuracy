@@ -2,6 +2,9 @@
     .factory('windsService', function () {
         return {
             formatBearing: function(bearing) {
+                if (bearing == null)
+                    return "Calm";
+
                 if (bearing < 0 && bearing > -180) {
                     bearing = 360.0 + bearing;
                 }
