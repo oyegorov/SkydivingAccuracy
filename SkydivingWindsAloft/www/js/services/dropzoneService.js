@@ -8,7 +8,7 @@
                 if (position != null)
                     url += "&longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude;
 
-                return $http.get(url).then(function(response) {
+                return $http.get(url, { timeout: 12000 }).then(function (response) {
                     dropzone = response.data;
                     return dropzone;
                 }, function(error) {

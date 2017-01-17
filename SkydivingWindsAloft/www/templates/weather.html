@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="list" ng-hide="weatherLoaded">
+        <div class="list" ng-hide="locationPresent">
             <div class="card">
                 <div class="item item-text-wrap">
                     Please open My Location and specify your dropzone or coordinates.
@@ -49,6 +49,12 @@
                 <button class="button button-full button-positive" ng-click="gotoLocationSettings()">
                     Go to My Location
                 </button>
+            </div>
+        </div>
+
+        <div class="list" ng-show="errorLoadingWeather">
+            <div class="item item-text-wrap" style="text-align: center">
+                Could not load weather data for {{locationName}}
             </div>
         </div>
     </ion-content>

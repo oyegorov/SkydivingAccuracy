@@ -8,10 +8,10 @@
         settingsService) {
         var getDropzoneFromService = function(position, nameFilter) {
             dropzoneService.getDropzone(position, nameFilter).then(function(dropzone) {
-                $scope.locationInfo.latitude = dropzone.latitude;
-                $scope.locationInfo.longitude = dropzone.longitude;
-                $scope.locationInfo.dropzoneInfo = dropzone.address;
-                $scope.locationInfo.dropzoneName = dropzone.name;
+                $scope.locationInfo.latitude = dropzone == null ? null : dropzone.latitude;
+                $scope.locationInfo.longitude = dropzone == null ? null : dropzone.longitude;
+                $scope.locationInfo.dropzoneInfo = dropzone == null ? null : dropzone.address;
+                $scope.locationInfo.dropzoneName = dropzone == null ? null : dropzone.name;
 
                 $scope.disableSaveButton = false;
                 $ionicLoading.hide();

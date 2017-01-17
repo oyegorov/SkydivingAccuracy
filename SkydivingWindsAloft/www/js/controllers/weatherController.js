@@ -13,26 +13,31 @@
             });
 
             weatherService.getWeather(latitude, longitude).then(function(weather) {
-                var windsAloftRecords = [];
+                if (weather != null) {
+                    var windsAloftRecords = [];
 
-                if (weather.windsAloft != null && weather.windsAloft.windsAloftRecords != null) {
-                    windsAloftRecords = weather.windsAloft.windsAloftRecords;
-                    for (var i = 0; i < windsAloftRecords.length; i++) {
-                        windsAloftRecords[i].bearing = windsService.formatBearing(windsAloftRecords[i].windHeading);
+                    if (weather.windsAloft != null && weather.windsAloft.windsAloftRecords != null) {
+                        windsAloftRecords = weather.windsAloft.windsAloftRecords;
+                        for (var i = 0; i < windsAloftRecords.length; i++) {
+                            windsAloftRecords[i].bearing = windsService.formatBearing(windsAloftRecords[i].windHeading);
+                        }
                     }
-                }
-                if (weather.groundWeather != null)
-                    weather.groundWeather.bearing = windsService.formatBearing(weather.groundWeather.windHeading);
+                    if (weather.groundWeather != null)
+                        weather.groundWeather.bearing = windsService.formatBearing(weather.groundWeather.windHeading);
 
-                $scope.windsAloftRecords = windsAloftRecords;
-                $scope.groundWeather = weather.groundWeather;
-                $scope.weatherLoaded = true;
+                    $scope.windsAloftRecords = windsAloftRecords;
+                    $scope.groundWeather = weather.groundWeather;
+                    $scope.weatherLoaded = true;
+                } else {
+                    $scope.errorLoadingWeather = true;
+                }
 
                 $ionicLoading.hide();
             });
         }
 
         $scope.reloadWeather = function() {
+            $scope.errorLoadingWeather = false;
             var locationInfo = settingsService.loadLocationInfo();
 
             if (locationInfo != null) {
@@ -41,9 +46,12 @@
                 else
                     $scope.locationName = '(' + locationInfo.latitude + '; ' + locationInfo.longitude + ')';
 
+                $scope.locationPresent = true;
+
                 loadWeather(locationInfo.latitude, locationInfo.longitude);
 
             } else {
+                $scope.locationPresent = false;
                 $scope.weatherLoaded = false;
                 $scope.dropzoneName = null;
             }
