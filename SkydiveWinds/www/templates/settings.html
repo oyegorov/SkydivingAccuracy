@@ -25,6 +25,14 @@
                     <option ng-repeat="u in altitudeUnits">{{u}}</option>
                 </select>
             </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Distance Units
+                </div>
+                <select ng-model="unitsSettings.distanceUnits" ng-change="onUnitsChanged()">
+                    <option ng-repeat="u in distanceUnits">{{u}}</option>
+                </select>
+            </label>
             <div class="item-text-wrap" style="text-align: center; margin: 10px">
                 Note: for convenience, 3 feet = 1m conversion is used.
             </div>

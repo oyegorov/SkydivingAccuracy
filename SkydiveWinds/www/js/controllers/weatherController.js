@@ -41,8 +41,23 @@
                         $scope.windsAloftValidTo = null;
                     }
 
-                    if (weather.groundWeather != null)
+                    if (weather.groundWeather != null) {
                         weather.groundWeather.bearing = windsService.formatBearing(weather.groundWeather.windHeading, weather.groundWeather.windSpeed);
+                        if (weather.groundWeather.metarStation != null) {
+                            $scope.groundStationInfo = weather.groundWeather.metarStation.icaoCode;
+                            if (weather.groundWeather.metarStation.city != null)
+                                $scope.groundStationInfo += ' (' + weather.groundWeather.metarStation.city + ')';
+
+                            $scope.groundStationDistance = weather.groundWeather.distanceToStation;
+                        } else {
+                            $scope.groundStationInfo = null;
+                            $scope.groundStationDistance = null;
+                        }
+
+                    } else {
+                        $scope.groundStationInfo = null;
+                        $scope.groundStationDistance = null;
+                    }
 
                     $scope.windsAloftRecords = windsAloftRecords;
                     $scope.groundWeather = weather.groundWeather;

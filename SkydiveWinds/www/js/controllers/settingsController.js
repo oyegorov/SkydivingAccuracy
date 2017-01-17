@@ -3,6 +3,7 @@
         $scope.temperatureUnits = unitsService.getTemperatureUnits();
         $scope.windSpeedUnits = unitsService.getWindSpeedUnits();
         $scope.altitudeUnits = unitsService.getAltitudeUnits();
+        $scope.distanceUnits = unitsService.getDistanceUnits();
 
         $scope.onUnitsChanged = function() {
             settingsService.saveUnitsSettings($scope.unitsSettings);

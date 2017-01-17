@@ -12,31 +12,7 @@
             <div class="item item-text-wrap" style="text-align: center">
                 Weather for {{locationName}}
             </div>
-            <div class="card">
-                <div class="item item-divider">
-                    Report details
-                </div>
-                <div class="item" style="font-size: 80%;">
-                    <div>
-                        <b>Requested on:</b> {{requestedOn | date : 'medium'}}
-                    </div>
-                    <div ng-show="windsAloftAirport != null">
-                        <b>W.A. airport:</b> {{windsAloftAirport}}
-                    </div>
-                    <div ng-show="windsAloftSource != null">
-                        <b>W.A. source:</b> {{windsAloftSource}}
-                    </div>
-                    <div ng-show="windsAloftUpdatedOn != null">
-                        <b>W.A. updated on:</b> {{windsAloftUpdatedOn | date : 'medium'}}
-                    </div>
-                    <div ng-show="windsAloftValidFrom != null">
-                        <b>W.A. valid from:</b> {{windsAloftValidFrom | date : 'medium'}}
-                    </div>
-                    <div ng-show="windsAloftValidTo != null">
-                        <b>W.A. valid to:</b> {{windsAloftValidTo | date : 'medium'}}
-                    </div>
-                </div>
-            </div>
+            
             <div class="card">
                 <div class="item item-divider">
                     Ground level
@@ -64,6 +40,38 @@
 
                     <p>Wind speed: {{unitsService.convertWindSpeed(windsAloftRecord.windSpeed, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
                     <p ng-show="windsAloftRecord.temperature != null">Temperature: {{unitsService.convertTemperature(windsAloftRecord.temperature, unitsSettings.temperatureUnits) | number:0}}&deg; {{ unitsSettings.temperatureUnits }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="item item-divider">
+                Report details
+            </div>
+            <div class="item" style="font-size: 80%;">
+                <div>
+                    <b>Requested on:</b> {{requestedOn | date : 'medium'}}
+                </div>
+                <div ng-show="groundStationInfo != null">
+                    <b>Ground station:</b> {{groundStationInfo}}
+                </div>
+                <div ng-show="groundStationDistance != null">
+                    <b>Dist. to station:</b> {{unitsService.convertWindSpeed(groundStationDistance, unitsSettings.distanceUnits) | number:0}} {{ unitsSettings.distanceUnits }}
+                </div>
+                <div ng-show="windsAloftAirport != null">
+                    <b>W.A. airport:</b> {{windsAloftAirport}}
+                </div>
+                <div ng-show="windsAloftSource != null">
+                    <b>W.A. source:</b> {{windsAloftSource}}
+                </div>
+                <div ng-show="windsAloftUpdatedOn != null">
+                    <b>W.A. updated on:</b> {{windsAloftUpdatedOn | date : 'medium'}}
+                </div>
+                <div ng-show="windsAloftValidFrom != null">
+                    <b>W.A. valid from:</b> {{windsAloftValidFrom | date : 'medium'}}
+                </div>
+                <div ng-show="windsAloftValidTo != null">
+                    <b>W.A. valid to:</b> {{windsAloftValidTo | date : 'medium'}}
                 </div>
             </div>
         </div>

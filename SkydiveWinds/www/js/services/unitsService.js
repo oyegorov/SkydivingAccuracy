@@ -8,13 +8,16 @@
         var WS_KNOTS = 'knots';
         var ALT_FEET = 'feet';
         var ALT_METERS = 'meters';
+        var DIST_KMS = 'kms';
+        var DIST_MILES = 'miles';
 
         return {
             getDefaultUnits() {
                 return {
                     'temperatureUnits': TEMP_CELSIUS,
                     'windSpeedUnits': WS_MPH,
-                    'altitudeUnits': ALT_FEET
+                    'altitudeUnits': ALT_FEET,
+                    'distanceUnits': DIST_KMS
                 };
             },
 
@@ -30,10 +33,23 @@
                 return [ALT_FEET, ALT_METERS];
             },
 
+            getDistanceUnits: function () {
+                return [DIST_KMS, DIST_MILES];
+            },
+
             convertTemperature: function(value, toUnits) {
                 switch (toUnits) {
-                case TEMP_FAHRENHEIT:
-                    return value * 9 / 5 + 32;
+                    case TEMP_FAHRENHEIT:
+                        return value * 9 / 5 + 32;
+                    default:
+                        return value;
+                }
+            },
+
+            convertDistance: function(value, toUnits) {
+                switch (toUnits) {
+                case DIST_MILES:
+                    return value * 0.621371;
                 default:
                     return value;
                 }
