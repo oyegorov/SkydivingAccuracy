@@ -5,40 +5,24 @@
         $ionicHistory,
         weatherService,
         settingsService,
-        unitsService) {
+        unitsService,
+        windsService) {
         var loadWeather = function(latitude, longitude) {
             $ionicLoading.show({
                 template: '<p>Loading...</p><ion-spinner></ion-spinner>'
             });
 
             weatherService.getWeather(latitude, longitude).then(function(weather) {
-                function formatBearing(bearing) {
-                    if (bearing < 0 && bearing > -180) {
-                        bearing = 360.0 + bearing;
-                    }
-                    if (bearing > 360 || bearing < -180) {
-                        return "Unknown";
-                    }
-
-                    var directions = [
-                        "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
-                        "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW",
-                        "N"
-                    ];
-                    var cardinal = directions[Math.floor(((bearing + 11.25) % 360) / 22.5)];
-                    return bearing + "\u00b0 " + cardinal;
-                };
-
                 var windsAloftRecords = [];
 
                 if (weather.windsAloft != null && weather.windsAloft.windsAloftRecords != null) {
                     windsAloftRecords = weather.windsAloft.windsAloftRecords;
                     for (var i = 0; i < windsAloftRecords.length; i++) {
-                        windsAloftRecords[i].bearing = formatBearing(windsAloftRecords[i].windHeading);
+                        windsAloftRecords[i].bearing = windsService.formatBearing(windsAloftRecords[i].windHeading);
                     }
                 }
                 if (weather.groundWeather != null)
-                    weather.groundWeather.bearing = formatBearing(weather.groundWeather.windHeading);
+                    weather.groundWeather.bearing = windsService.formatBearing(weather.groundWeather.windHeading);
 
                 $scope.windsAloftRecords = windsAloftRecords;
                 $scope.groundWeather = weather.groundWeather;
