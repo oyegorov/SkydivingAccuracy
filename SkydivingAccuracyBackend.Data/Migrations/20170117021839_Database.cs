@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SkydivingAccuracyBackend.Data.Migrations
 {
-    public partial class Migrations : Migration
+    public partial class Database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,7 @@ namespace SkydivingAccuracyBackend.Data.Migrations
                     AirportName = table.Column<string>(nullable: true),
                     Latitude = table.Column<double>(nullable: false),
                     Longitude = table.Column<double>(nullable: false),
+                    Source = table.Column<string>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: false),
                     ValidFrom = table.Column<DateTime>(nullable: false),
                     ValidTo = table.Column<DateTime>(nullable: false),

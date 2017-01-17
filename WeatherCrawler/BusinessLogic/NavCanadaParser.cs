@@ -98,6 +98,7 @@ namespace WeatherCrawler.BusinessLogic
                     };
 
                     windsAloft.UpdatedOn = updatedOn;
+                    windsAloft.Source = "NAVCANADA";
 
                     result.Add(windsAloft);
                 }

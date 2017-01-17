@@ -80,6 +80,7 @@ namespace WeatherCrawler.BusinessLogic
                             {
                                 Airport = airport,
                                 UpdatedOn = updatedOn,
+                                Source = "aviationweather.gov",
                                 ValidFrom = validFromDate.Value,
                                 ValidTo = validToDate.Value,
                                 WindsAloftRecords = new[]

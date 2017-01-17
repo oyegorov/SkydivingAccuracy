@@ -28,6 +28,8 @@ namespace SkydivingAccuracyBackend.Data.Migrations
 
                     b.Property<double>("Longitude");
 
+                    b.Property<string>("Source");
+
                     b.Property<DateTime>("UpdatedOn");
 
                     b.Property<DateTime>("ValidFrom");

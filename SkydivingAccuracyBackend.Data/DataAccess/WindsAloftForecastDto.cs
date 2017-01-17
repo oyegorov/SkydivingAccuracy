@@ -16,6 +16,8 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
         
         public string AirportCode { get; set; }
 
+        public string Source { get; set; }
+
         public string AirportName { get; set; }
 
         public double Latitude { get; set; }
@@ -42,6 +44,7 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
                 AirportName = windsAloft.Airport.Name,
                 Latitude = windsAloft.Airport.Latitude,
                 Longitude = windsAloft.Airport.Longitude,
+                Source = windsAloft.Source,
                 WindsAloftData = JsonConvert.SerializeObject(windsAloft.WindsAloftRecords)
             };
         }
@@ -55,6 +58,8 @@ namespace SkydivingAccuracyBackend.Data.DataAccess
                 ValidFrom = DateTime.SpecifyKind(ValidFrom, DateTimeKind.Utc),
 
                 ValidTo = DateTime.SpecifyKind(ValidTo, DateTimeKind.Utc),
+
+                Source = Source,
 
                 Airport = new Airport
                 {

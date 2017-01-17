@@ -8,8 +8,8 @@ using SkydivingAccuracyBackend.Data.DataAccess;
 namespace SkydivingAccuracyBackend.Data.Migrations
 {
     [DbContext(typeof(SkydivingAccuracyDbContext))]
-    [Migration("20161008202424_Migrations")]
-    partial class Migrations
+    [Migration("20170117021839_Database")]
+    partial class Database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,8 @@ namespace SkydivingAccuracyBackend.Data.Migrations
                     b.Property<double>("Latitude");
 
                     b.Property<double>("Longitude");
+
+                    b.Property<string>("Source");
 
                     b.Property<DateTime>("UpdatedOn");
 
