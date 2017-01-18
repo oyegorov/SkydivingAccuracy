@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="io.skyclown.skydivewinds" version="0.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" defaultLocale="en-US">
-  <name>SkydiveWinds</name>
+  <name>Skydive Winds</name>
   <description>An application that provides winds aloft information for skydivers</description>
   <author email="vscordovatools@microsoft.com" href="http://taco.visualstudio.com">Oleg Yegorov</author>
   <content src="index.html" />
