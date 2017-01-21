@@ -12,7 +12,7 @@
         var DIST_MILES = 'miles';
 
         return {
-            getDefaultUnits() {
+            getDefaultUnits: function() {
                 return {
                     'temperatureUnits': TEMP_CELSIUS,
                     'windSpeedUnits': WS_MPH,

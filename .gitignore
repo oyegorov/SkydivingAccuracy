@@ -258,3 +258,4 @@ plugins
 lib
 ionic.app.css
 ionic.app.min.css
+build.json
