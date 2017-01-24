@@ -51,11 +51,7 @@
 
             settingsService.saveLocationInfo($scope.locationInfo);
 
-            $ionicHistory.nextViewOptions({
-                disableBack: true
-            });
-
-            $state.transitionTo('app.weather');
+            $ionicHistory.goBack();
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
