@@ -1,5 +1,18 @@
 ﻿angular.module('starter.controllers')
     .controller('MapController', function ($scope, $state, settingsService) {
+        var setMarker = function(latLng) {
+            if ($scope.marker != null) {
+                $scope.marker.setPosition(latLng);
+                return;
+            }
+
+            $scope.marker = new google.maps.Marker({
+                position: latLng,
+                map: $scope.map,
+                draggable: true
+            });
+        }
+
         $scope.initializeMaps = function () {
             var locationInfo = settingsService.loadLocationInfo();
 
@@ -18,6 +31,7 @@
             var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
             if ($scope.map != null) {
                 $scope.map.panTo(latLng);
+                setMarker(latLng);
                 return;
             }
 
@@ -38,6 +52,7 @@
             };
 
             $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+            setMarker(latLng);
         }
 
         $scope.$on('$ionicView.beforeEnter', function () {
