@@ -17,7 +17,7 @@
                     'temperatureUnits': TEMP_CELSIUS,
                     'windSpeedUnits': WS_MPH,
                     'altitudeUnits': ALT_FEET,
-                    'distanceUnits': DIST_KMS
+                    'distanceUnits': DIST_MILES
                 };
             },
 
