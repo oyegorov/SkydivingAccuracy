@@ -1,14 +1,14 @@
 <ion-view view-title="Weather">
-    <ion-nav-buttons side="right" ng-show="weatherLoaded">
+    <ion-nav-buttons side="right" ng-show="weatherService.weather.weatherLoaded">
         <button class="button" ng-click="gotoLocationSettings();" style="margin-left: 10px">
             <i class="icon ion-flag"></i>
         </button>
-        <button class="button" ng-click="reloadWeather();" style="margin-left: 10px">
+        <button class="button" ng-click="loadWeather(true);" style="margin-left: 10px">
             <i class="icon ion-refresh"></i>
         </button>
     </ion-nav-buttons>
     <ion-content>
-        <div class="list" ng-show="weatherLoaded">
+        <div class="list" ng-show="weatherService.weather.weatherLoaded">
             <div class="item item-text-wrap" style="text-align: center">
                 Weather for {{locationName}}
             </div>
@@ -18,17 +18,17 @@
                     Ground level
                 </div>
                 <div class="item item-icon-left">
-                    <div ng-style="{'visibility': (groundWeather.windSpeed != null && groundWeather.windSpeed >= 1 ? 'visible' : 'hidden') }">
+                    <div ng-style="{'visibility': (weatherService.weather.groundWeather.windSpeed != null && weatherService.weather.groundWeather.windSpeed >= 1 ? 'visible' : 'hidden') }">
                         <div class="icon ion-arrow-up-a" rotate degrees="groundWeather.windHeading + 180" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     </div>
-                    <b>{{groundWeather.bearing}}</b>
-                    <p>Wind speed: {{unitsService.convertWindSpeed(groundWeather.windSpeed, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
-                    <p>Wind gust: {{unitsService.convertWindSpeed(groundWeather.windGust, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
-                    <p>Temperature: {{unitsService.convertTemperature(groundWeather.temperature, unitsSettings.temperatureUnits) | number:0}}&deg; {{ unitsSettings.temperatureUnits }}
+                    <b>{{weatherService.weather.groundWeather.bearing}}</b>
+                    <p>Wind speed: {{unitsService.convertWindSpeed(weatherService.weather.groundWeather.windSpeed, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
+                    <p>Wind gust: {{unitsService.convertWindSpeed(weatherService.weather.groundWeather.windGust, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
+                    <p>Temperature: {{unitsService.convertTemperature(weatherService.weather.groundWeather.temperature, unitsSettings.temperatureUnits) | number:0}}&deg; {{ unitsSettings.temperatureUnits }}
                 </div>
             </div>
 
-            <div class="card" ng-repeat="windsAloftRecord in windsAloftRecords">
+            <div class="card" ng-repeat="windsAloftRecord in weatherService.weather.windsAloftRecords">
                 <div class="item item-divider">
                     {{unitsService.convertAltitude(windsAloftRecord.altitude, unitsSettings.altitudeUnits)}} {{unitsSettings.altitudeUnits}}
                 </div>
@@ -49,34 +49,34 @@
                 </div>
                 <div class="item" style="font-size: 80%;">
                     <div>
-                        <b>Requested on:</b> {{requestedOn | date : 'medium'}}
+                        <b>Requested on:</b> {{weatherService.weather.requestedOn | date : 'medium'}}
                     </div>
-                    <div ng-show="groundStationInfo != null">
-                        <b>Ground station:</b> {{groundStationInfo}}
+                    <div ng-show="weatherService.weather.groundStationInfo != null">
+                        <b>Ground station:</b> {{weatherService.weather.groundStationInfo}}
                     </div>
-                    <div ng-show="groundStationDistance != null">
-                        <b>Dist. to station:</b> {{unitsService.convertWindSpeed(groundStationDistance, unitsSettings.distanceUnits) | number:0}} {{ unitsSettings.distanceUnits }}
+                    <div ng-show="weatherService.weather.groundStationDistance != null">
+                        <b>Dist. to station:</b> {{unitsService.convertWindSpeed(weatherService.weather.groundStationDistance, unitsSettings.distanceUnits) | number:0}} {{ unitsSettings.distanceUnits }}
                     </div>
-                    <div ng-show="windsAloftAirport != null">
-                        <b>W.A. airport:</b> {{windsAloftAirport}}
+                    <div ng-show="weatherService.weather.windsAloftAirport != null">
+                        <b>W.A. airport:</b> {{weatherService.weather.windsAloftAirport}}
                     </div>
-                    <div ng-show="windsAloftSource != null">
-                        <b>W.A. source:</b> {{windsAloftSource}}
+                    <div ng-show="weatherService.weather.windsAloftSource != null">
+                        <b>W.A. source:</b> {{weatherService.weather.windsAloftSource}}
                     </div>
-                    <div ng-show="windsAloftUpdatedOn != null">
-                        <b>W.A. updated on:</b> {{windsAloftUpdatedOn | date : 'medium'}}
+                    <div ng-show="weatherService.weather.windsAloftUpdatedOn != null">
+                        <b>W.A. updated on:</b> {{weatherService.weather.windsAloftUpdatedOn | date : 'medium'}}
                     </div>
-                    <div ng-show="windsAloftValidFrom != null">
-                        <b>W.A. valid from:</b> {{windsAloftValidFrom | date : 'medium'}}
+                    <div ng-show="weatherService.weather.windsAloftValidFrom != null">
+                        <b>W.A. valid from:</b> {{weatherService.weather.windsAloftValidFrom | date : 'medium'}}
                     </div>
-                    <div ng-show="windsAloftValidTo != null">
-                        <b>W.A. valid to:</b> {{windsAloftValidTo | date : 'medium'}}
+                    <div ng-show="weatherService.weather.windsAloftValidTo != null">
+                        <b>W.A. valid to:</b> {{weatherService.weather.windsAloftValidTo | date : 'medium'}}
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="list" ng-hide="locationPresent">
+        <div class="list" ng-hide="weatherService.weather.locationInfo != null">
             <div class="card">
                 <div class="item item-text-wrap">
                     Please open My Location and specify your dropzone or coordinates.
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <div class="list" ng-show="errorLoadingWeather">
+        <div class="list" ng-show="weatherService.weather.errorLoadingWeather">
             <div class="item item-text-wrap" style="text-align: center">
                 Could not load weather data for {{locationName}}
             </div>
