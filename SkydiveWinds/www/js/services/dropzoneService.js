@@ -1,10 +1,10 @@
 ﻿angular.module('starter.controllers', [])
-    .factory('dropzoneService', function($http) {
+    .factory('dropzoneService', function ($http, globalConfigurationService) {
         var dropzone = null;
 
         return {
             getDropzone: function(position, nameFilter) {
-                var url = "http://vps96817.vps.ovh.ca/api/dropzones/nearest?name=" + nameFilter;
+                var url = globalConfigurationService.backendApiBaseUrl + "/dropzones/nearest?name=" + nameFilter;
                 if (position != null)
                     url += "&longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude;
 
