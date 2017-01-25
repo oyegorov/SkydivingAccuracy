@@ -6,7 +6,7 @@
             getWeather: function(latitude, longitude) {
                 var url = globalConfigurationService.backendApiBaseUrl + "/weather?longitude=" + longitude + "&latitude=" + latitude;
 
-                return $http.get(url, { timeout: 12000 }).then(function(response) {
+                return $http.get(url, { timeout: globalConfigurationService.backendCallsTimeout }).then(function (response) {
                     weather = response.data;
                     return weather;
                 }, function(error) {

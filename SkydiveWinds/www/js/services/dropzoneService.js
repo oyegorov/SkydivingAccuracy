@@ -1,4 +1,4 @@
-﻿angular.module('starter.controllers', [])
+﻿angular.module('starter.controllers')
     .factory('dropzoneService', function ($http, globalConfigurationService) {
         var dropzone = null;
 
@@ -8,7 +8,7 @@
                 if (position != null)
                     url += "&longitude=" + position.coords.longitude + "&latitude=" + position.coords.latitude;
 
-                return $http.get(url, { timeout: 12000 }).then(function (response) {
+                return $http.get(url, { timeout: globalConfigurationService.backendCallsTimeout }).then(function (response) {
                     dropzone = response.data;
                     return dropzone;
                 }, function(error) {
