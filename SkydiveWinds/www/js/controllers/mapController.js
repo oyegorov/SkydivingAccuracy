@@ -1,5 +1,5 @@
 ﻿angular.module('starter.controllers')
-    .controller('MapController', function ($scope, $state, settingsService) {
+    .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService) {
         var setMarker = function(latLng) {
             if ($scope.marker != null) {
                 $scope.marker.setPosition(latLng);
@@ -11,6 +11,32 @@
                 map: $scope.map,
                 draggable: true
             });
+        }
+
+        $scope.weatherService = weatherService;
+
+        $scope.loadWeather = function (force) {
+            $scope.errorLoadingWeather = false;
+            var locationInfo = settingsService.loadLocationInfo();
+
+            if (locationInfo != null) {
+                if (locationInfo.dropzoneName != null)
+                    $scope.locationName = locationInfo.dropzoneName;
+                else
+                    $scope.locationName = '(' + locationInfo.latitude + '; ' + locationInfo.longitude + ')';
+            }
+
+            weatherService.loadWeather(locationInfo, force,
+                function onStartLoading() {
+                    $ionicLoading.show({
+                        template: '<p>Loading...</p><ion-spinner></ion-spinner>'
+                    });
+                },
+                function onEndLoading() {
+                    $ionicLoading.hide();
+                    $scope.initializeMaps();
+                }
+            );
         }
 
         $scope.initializeMaps = function () {
@@ -37,7 +63,7 @@
 
             var mapOptions = {
                 center: latLng,
-                zoom: 15,
+                zoom: 17,
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 mapTypeControlOptions: {
                     mapTypeIds: [google.maps.MapTypeId.SATELLITE]
@@ -56,6 +82,7 @@
         }
 
         $scope.$on('$ionicView.beforeEnter', function () {
+            $scope.loadWeather(false);
             $scope.initializeMaps();
         });
 
