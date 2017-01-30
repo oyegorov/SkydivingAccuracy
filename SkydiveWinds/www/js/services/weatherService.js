@@ -81,7 +81,7 @@
             });
         }
 
-        this.loadWeather = function (locationInfo, forceReload, onLoadStart, onLoadCompleted) {
+        this.loadWeather = function (locationInfo, forceReload, onLoadStart, onLoadCompleted, onLoadNotNeeded) {
             if (locationInfo == null) {
                 this.weather = {
                     weatherLoaded: false,
@@ -95,6 +95,10 @@
                 this.weather.locationInfo.latitude == locationInfo.latitude &&
                 this.weather.locationInfo.longitude == locationInfo.longitude &&
                 !forceReload) {
+
+                if (onLoadNotNeeded != null)
+                    onLoadNotNeeded();
+                
                 return;
             }
 

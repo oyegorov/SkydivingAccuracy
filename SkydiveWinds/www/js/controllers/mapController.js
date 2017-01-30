@@ -1,6 +1,71 @@
 ﻿angular.module('starter.controllers')
-    .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService) {
-        var setMarker = function(latLng) {
+    .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService, unitsService) {
+        var createExitAltitudeCombobox = function () {
+            if ($scope.map == null)
+                return;
+
+            $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].clear();
+
+            if (weatherService.weather.windsAloftRecords == null || weatherService.weather.windsAloftRecords.length == 0)
+                return;
+
+            var altitudes = [];
+            for (var i = 0; i < weatherService.weather.windsAloftRecords.length; i++) {
+                var w = weatherService.weather.windsAloftRecords[i];
+                altitudes.push(unitsService.convertAltitude(w.altitude, $scope.unitsSettings.altitudeUnits));
+            }
+            
+            var controlDiv = document.createElement('div');
+
+            var controlUI = document.createElement('div');
+            controlUI.style.backgroundColor = '#fff';
+            controlUI.style.border = '2px solid #fff';
+            controlUI.style.cursor = 'pointer';
+            controlUI.style.margin = '10px';
+            controlUI.style.padding = '2px';
+            controlDiv.appendChild(controlUI);
+
+            var exitAltitudeSpan = document.createElement('span');
+            exitAltitudeSpan.innerHTML = 'Exit at: ';
+            controlUI.appendChild(exitAltitudeSpan);
+
+            var comboBox = document.createElement('select');
+            comboBox.style.paddingLeft = '5px';
+            comboBox.style.paddingRight = '5px';
+            controlUI.appendChild(comboBox);
+
+            for (var i = 0; i < altitudes.length; i++) {
+                var o = document.createElement("option");
+                var t = document.createTextNode(altitudes[i]);
+                o.setAttribute("value", altitudes[i]);
+                o.appendChild(t);
+                comboBox.appendChild(o);
+            }
+
+            $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
+        }
+
+        var createCircle = function (latLng, radius, color) {
+            if ($scope.map == null)
+                return null;
+
+            var circleOptions = {
+                strokeColor: "#000000",
+                strokeOpacity: 0.25,
+                strokeWeight: 2,
+                fillColor: color,
+                fillOpacity: 0.25,
+                map: $scope.map,
+                center: latLng,
+                radius: radius
+            };
+
+            var circle = new google.maps.Circle(circleOptions);
+
+            return circle;
+        }
+
+        var setMarker = function (latLng) {
             if ($scope.marker != null) {
                 $scope.marker.setPosition(latLng);
                 return;
@@ -11,6 +76,8 @@
                 map: $scope.map,
                 draggable: true
             });
+
+            createCircle(latLng, 100, "#ff5500");
         }
 
         $scope.weatherService = weatherService;
@@ -35,6 +102,10 @@
                 function onEndLoading() {
                     $ionicLoading.hide();
                     $scope.initializeMaps();
+                    createExitAltitudeCombobox();
+                },
+                function onLoadNotNeeded() {
+                    createExitAltitudeCombobox();
                 }
             );
         }
@@ -66,7 +137,7 @@
                 zoom: 17,
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 mapTypeControlOptions: {
-                    mapTypeIds: [google.maps.MapTypeId.SATELLITE]
+                    mapTypeIds: []
                 },
                 disableDefaultUI: true,
                 mapTypeControl: true,
@@ -78,10 +149,12 @@
             };
 
             $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+            createExitAltitudeCombobox();
             setMarker(latLng);
         }
 
         $scope.$on('$ionicView.beforeEnter', function () {
+            $scope.unitsSettings = settingsService.loadUnitsSettings();
             $scope.loadWeather(false);
             $scope.initializeMaps();
         });
