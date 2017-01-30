@@ -1,6 +1,45 @@
 ﻿angular.module('starter.controllers')
     .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService, unitsService) {
-        var createExitAltitudeCombobox = function () {
+        var landingArrow;
+
+        var findSecondPoint = function(latLng, R, angle) {
+            var dx = R * Math.cos(angle);
+            var dy = R * Math.sin(angle);
+
+            var delta_longitude = dx / (111320 * Math.cos(latLng.lat()));
+            var delta_latitude = dy / 110540;
+
+            return new google.maps.LatLng(latLng.lat() + delta_latitude, latLng.lng() + delta_longitude);
+        }
+
+        var drawLandingArrow = function () {
+            if ($scope.map == null)
+                return;
+
+            var locationInfo = settingsService.loadLocationInfo();
+            var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
+
+            if (landingArrow != null)
+                landingArrow.setMap(null);
+            if (weatherService.weather.groundWeather == null || weatherService.weather.groundWeather.windHeading == null)
+                return;
+
+            var lineSymbol = {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+            };
+
+            landingArrow = new google.maps.Polyline({
+                strokeColor: "#FF0000",
+                path: [latLng, findSecondPoint(latLng, 50, weatherService.weather.groundWeather.windHeading)],
+                icons: [{
+                    icon: lineSymbol,
+                    offset: '100%'
+                }],
+                map: $scope.map
+            });
+        }
+
+        var createExitAltitudeCombobox = function() {
             if ($scope.map == null)
                 return;
 
@@ -45,7 +84,7 @@
             $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
         }
 
-        var createCircle = function (latLng, radius, color) {
+        var createCircle = function(latLng, radius, color) {
             if ($scope.map == null)
                 return null;
 
@@ -103,9 +142,12 @@
                     $ionicLoading.hide();
                     $scope.initializeMaps();
                     createExitAltitudeCombobox();
+                    drawLandingArrow();
                 },
                 function onLoadNotNeeded() {
+                    $scope.initializeMaps();
                     createExitAltitudeCombobox();
+                    drawLandingArrow();
                 }
             );
         }
@@ -149,14 +191,13 @@
             };
 
             $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-            createExitAltitudeCombobox();
+
             setMarker(latLng);
         }
 
         $scope.$on('$ionicView.beforeEnter', function () {
             $scope.unitsSettings = settingsService.loadUnitsSettings();
             $scope.loadWeather(false);
-            $scope.initializeMaps();
         });
 
         $scope.gotoLocationSettings = function () {
