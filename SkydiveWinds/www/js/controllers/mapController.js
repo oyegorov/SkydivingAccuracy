@@ -1,11 +1,12 @@
 ﻿angular.module('starter.controllers')
     .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService, unitsService) {
         var landingArrow;
+        var spotCircle;
 
         var findSecondPoint = function (latLng, d, angle) {
             var R = 6371e3;
 
-            var angleRad = (angle + 180) * Math.PI / 180;
+            var angleRad = (360 - angle) * Math.PI / 180;
             var lat1 = latLng.lat() * Math.PI / 180;
             var lng1 = latLng.lng() * Math.PI / 180;
             var angDistance = d / R;
@@ -13,26 +14,56 @@
             var lat2 = Math.asin(Math.sin(lat1) * Math.cos(angDistance) + Math.cos(lat1) * Math.sin(angDistance) * Math.cos(angleRad));
             var dlon = Math.atan2(Math.sin(angleRad) * Math.sin(angDistance) * Math.cos(lat1),
                 Math.cos(angDistance) - Math.sin(lat1) * Math.sin(lat2));
-            var lng2 = lng1 + dlon + Math.PI % (2 * Math.PI) - Math.PI;
-
-
-            //var lat2 = Math.asin(Math.sin(lat1) * Math.cos(angDistance) +
-            //        Math.cos(lat1) * Math.sin(angDistance) * Math.cos(angleRad));
-            //var lng2 = lng1 + Math.atan2(Math.sin(angleRad) * Math.sin(angDistance) * Math.cos(lng1),
-            //                         Math.cos(angDistance) - Math.sin(lng1) * Math.sin(lng1));
+            var lng2 = lng1 - dlon + Math.PI % (2 * Math.PI) - Math.PI;
 
             return new google.maps.LatLng(lat2 * 180 / Math.PI, (lng2 * 180 / Math.PI + 540) % 360 - 180);
+        }
+
+        var findSpot = function(latLng, exitAltitude) {
+            if (weatherService.weather.windsAloftRecords == null || weatherService.weather.windsAloftRecords.length == 0)
+                return null;
+
+            var driftAngle = (weatherService.weather.groundWeather.windHeading + weatherService.weather.windsAloftRecords[0].windHeading) / 2;
+            
+            var K = 25;
+            var A = 3;
+            var V = (weatherService.weather.groundWeather.windSpeed + weatherService.weather.windsAloftRecords[0].windSpeed) / 2;
+            var D = K * A * V;
+
+            var p = findSecondPoint(latLng, D, driftAngle);
+
+            K = 3;
+
+            var w = weatherService.weather.windsAloftRecords;
+            for (var i = 1; i < w.length && w[i].altitude <= exitAltitude; i++) {
+                driftAngle = (w[i].windHeading + w[i - 1].windHeading) / 2;
+
+                A = (w[i].altitude - w[i - 1].altitude) / 1000;
+                V = (w[i].windSpeed + w[i - 1].windSpeed) / 2;
+
+                D = K * A * V;
+                p = findSecondPoint(p, D, driftAngle);
+            }
+
+            D = 150;
+            driftAngle = w[w.length - 1].windHeading;
+            p = findSecondPoint(p, D, driftAngle);
+
+            return p;
         }
 
         var drawLandingArrow = function () {
             if ($scope.map == null)
                 return;
 
-            var locationInfo = settingsService.loadLocationInfo();
-            var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
-
             if (landingArrow != null)
                 landingArrow.setMap(null);
+
+            var locationInfo = settingsService.loadLocationInfo();
+            if (locationInfo == null)
+                return;
+            var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
+            
             if (weatherService.weather.groundWeather == null || weatherService.weather.groundWeather.windHeading == null)
                 return;
 
@@ -47,7 +78,7 @@
 
             landingArrow = new google.maps.Polyline({
                 strokeColor: "#FFFF00",
-                path: [findSecondPoint(latLng, finalLegLength, weatherService.weather.groundWeather.windHeading), latLng],
+                path: [findSecondPoint(latLng, finalLegLength, 180 + weatherService.weather.groundWeather.windHeading), latLng],
                 icons: [{
                     icon: lineSymbol,
                     offset: '100%'
@@ -101,36 +132,46 @@
             $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
         }
 
-        var createCircle = function(latLng, radius, color) {
+        var drawSpot = function() {
             if ($scope.map == null)
-                return null;
+                return;
+            if (spotCircle != null)
+                spotCircle.setMap(null);
+            
+            var locationInfo = settingsService.loadLocationInfo();
+            if (locationInfo == null)
+                return;
+
+            var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
+            var spot = findSpot(latLng, 9000);
+            if (spot == null)
+                return;
 
             var circleOptions = {
                 strokeColor: "#000000",
                 strokeOpacity: 0.25,
                 strokeWeight: 2,
-                fillColor: color,
+                fillColor: "#ffff00",
                 fillOpacity: 0.25,
                 map: $scope.map,
-                center: latLng,
-                radius: radius
+                center: spot,
+                radius: 200
             };
 
-            var circle = new google.maps.Circle(circleOptions);
-
-            return circle;
+            spotCircle = new google.maps.Circle(circleOptions);
         }
 
         var setMarker = function (latLng) {
             if ($scope.marker != null) {
                 $scope.marker.setPosition(latLng);
+                drawSpot();
                 return;
             }
 
             $scope.marker = new google.maps.Marker({
                 position: latLng,
                 map: $scope.map,
-                draggable: true,
+                draggable: true
             });
             $scope.marker.addListener('dragend', function onDragEnd(e) {
                 var locationInfo = settingsService.loadLocationInfo();
@@ -141,7 +182,7 @@
                 drawLandingArrow();
             });
             
-            createCircle(latLng, 100, "#ff5500");
+            drawSpot();
         }
 
         $scope.weatherService = weatherService;
@@ -168,11 +209,13 @@
                     $scope.initializeMaps();
                     createExitAltitudeCombobox();
                     drawLandingArrow();
+                    drawSpot();
                 },
                 function onLoadNotNeeded() {
                     $scope.initializeMaps();
                     createExitAltitudeCombobox();
                     drawLandingArrow();
+                    drawSpot();
                 }
             );
         }
