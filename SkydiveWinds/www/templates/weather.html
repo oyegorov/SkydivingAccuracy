@@ -19,7 +19,7 @@
                 </div>
                 <div class="item item-icon-left">
                     <div ng-style="{'visibility': (weatherService.weather.groundWeather.windSpeed != null && weatherService.weather.groundWeather.windSpeed >= 1 ? 'visible' : 'hidden') }">
-                        <div class="icon ion-arrow-up-a" rotate degrees="groundWeather.windHeading + 180" style="float: left; margin-right: 5px; margin-top: 0px"></div>
+                        <div class="icon ion-arrow-up-a" rotate degrees="weatherService.weather.groundWeather.windHeading + 180" style="float: left; margin-right: 5px; margin-top: 0px"></div>
                     </div>
                     <b>{{weatherService.weather.groundWeather.bearing}}</b>
                     <p>Wind speed: {{unitsService.convertWindSpeed(weatherService.weather.groundWeather.windSpeed, unitsSettings.windSpeedUnits) | number:0}} {{ unitsSettings.windSpeedUnits }}
