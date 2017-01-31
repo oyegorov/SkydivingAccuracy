@@ -1,5 +1,7 @@
 ﻿angular.module('starter.controllers')
     .factory('settingsService', function(unitsService) {
+        var DEFAULT_PREFERRED_ALTITUDE = 3000;
+        var preferredExitAltitudeKey = 'preferredExitAltitudeKey';
         var locationInfoKey = 'locationInfo';
         var unitsSettingsKey = 'unitsSettings';
         var storage = window.localStorage;
@@ -27,6 +29,15 @@
 
             saveUnitsSettings: function(unitsSettings) {
                 storage.setItem(unitsSettingsKey, JSON.stringify(unitsSettings));
+            },
+
+            loadPreferredExitAltitude: function() {
+                var preferredAltitudeStringValue = storage.getItem(preferredExitAltitudeKey);
+                return preferredAltitudeStringValue == null ? DEFAULT_PREFERRED_ALTITUDE : parseInt(preferredAltitudeStringValue);
+            },
+
+            savePreferredExitAltitude: function (preferredExitAltitude) {
+                storage.setItem(preferredExitAltitudeKey, preferredExitAltitude.toString());
             }
         }
     });
