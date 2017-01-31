@@ -2,14 +2,26 @@
     .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService, unitsService) {
         var landingArrow;
 
-        var findSecondPoint = function(latLng, R, angle) {
-            var dx = R * Math.cos(angle);
-            var dy = R * Math.sin(angle);
+        var findSecondPoint = function (latLng, d, angle) {
+            var R = 6371e3;
 
-            var delta_longitude = dx / (111320 * Math.cos(latLng.lat()));
-            var delta_latitude = dy / 110540;
+            var angleRad = (angle + 180) * Math.PI / 180;
+            var lat1 = latLng.lat() * Math.PI / 180;
+            var lng1 = latLng.lng() * Math.PI / 180;
+            var angDistance = d / R;
 
-            return new google.maps.LatLng(latLng.lat() + delta_latitude, latLng.lng() + delta_longitude);
+            var lat2 = Math.asin(Math.sin(lat1) * Math.cos(angDistance) + Math.cos(lat1) * Math.sin(angDistance) * Math.cos(angleRad));
+            var dlon = Math.atan2(Math.sin(angleRad) * Math.sin(angDistance) * Math.cos(lat1),
+                Math.cos(angDistance) - Math.sin(lat1) * Math.sin(lat2));
+            var lng2 = lng1 + dlon + Math.PI % (2 * Math.PI) - Math.PI;
+
+
+            //var lat2 = Math.asin(Math.sin(lat1) * Math.cos(angDistance) +
+            //        Math.cos(lat1) * Math.sin(angDistance) * Math.cos(angleRad));
+            //var lng2 = lng1 + Math.atan2(Math.sin(angleRad) * Math.sin(angDistance) * Math.cos(lng1),
+            //                         Math.cos(angDistance) - Math.sin(lng1) * Math.sin(lng1));
+
+            return new google.maps.LatLng(lat2 * 180 / Math.PI, (lng2 * 180 / Math.PI + 540) % 360 - 180);
         }
 
         var drawLandingArrow = function () {
@@ -28,9 +40,14 @@
                 path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
             };
 
+            var windSpeedMs = unitsService.convertWindSpeed(weatherService.weather.groundWeather.windSpeed,
+                unitsService.WS_MPS);
+            var forwardSpeed = 15 - windSpeedMs > 0 ? 15 - windSpeedMs : 1;
+            var finalLegLength = 20 * forwardSpeed;
+
             landingArrow = new google.maps.Polyline({
-                strokeColor: "#FF0000",
-                path: [latLng, findSecondPoint(latLng, 50, weatherService.weather.groundWeather.windHeading)],
+                strokeColor: "#FFFF00",
+                path: [findSecondPoint(latLng, finalLegLength, weatherService.weather.groundWeather.windHeading), latLng],
                 icons: [{
                     icon: lineSymbol,
                     offset: '100%'
@@ -113,9 +130,17 @@
             $scope.marker = new google.maps.Marker({
                 position: latLng,
                 map: $scope.map,
-                draggable: true
+                draggable: true,
             });
+            $scope.marker.addListener('dragend', function onDragEnd(e) {
+                var locationInfo = settingsService.loadLocationInfo();
+                locationInfo.latitude = e.latLng.lat();
+                locationInfo.longitude = e.latLng.lng();
+                settingsService.saveLocationInfo(locationInfo);
 
+                drawLandingArrow();
+            });
+            
             createCircle(latLng, 100, "#ff5500");
         }
 

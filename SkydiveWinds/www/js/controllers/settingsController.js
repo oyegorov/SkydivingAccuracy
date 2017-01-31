@@ -7,7 +7,6 @@
 
         $scope.onUnitsChanged = function() {
             settingsService.saveUnitsSettings($scope.unitsSettings);
-
         }
 
         $scope.$on('$ionicView.beforeEnter', function() {
