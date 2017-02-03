@@ -1,6 +1,6 @@
 ﻿angular.module('starter.controllers')
     .factory('settingsService', function(unitsService) {
-        var DEFAULT_PREFERRED_ALTITUDE = 3000;
+        var DEFAULT_PREFERRED_ALTITUDE = 12000;
         var preferredExitAltitudeKey = 'preferredExitAltitudeKey';
         var locationInfoKey = 'locationInfo';
         var unitsSettingsKey = 'unitsSettings';

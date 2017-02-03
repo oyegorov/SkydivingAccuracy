@@ -8,9 +8,36 @@
             onMarkerMoved: '&'
         },
 
-        controller: function (unitsService, spottingService) {
+        controller: function (unitsService, spottingService, settingsService) {
             var ctrl = this;
             
+            var drawSpot = function () {
+                if (ctrl.map == null)
+                    return;
+                if (ctrl.spotCircle != null)
+                    ctrl.spotCircle.setMap(null);
+                if (ctrl.locationInfo == null)
+                    return;
+
+                var latLng = new google.maps.LatLng(ctrl.locationInfo.latitude, ctrl.locationInfo.longitude);
+                var spotInformation = spottingService.getSpotInformation(ctrl.weather, latLng, ctrl.preferredExitAltitude);
+                if (spotInformation == null)
+                    return;
+
+                var circleOptions = {
+                    strokeColor: "#000000",
+                    strokeOpacity: 0.25,
+                    strokeWeight: 2,
+                    fillColor: "#ffff00",
+                    fillOpacity: 0.25,
+                    map: ctrl.map,
+                    center: spotInformation.spotCenter,
+                    radius: 200
+                };
+
+                ctrl.spotCircle = new google.maps.Circle(circleOptions);
+            }
+
             var createExitAltitudeCombobox = function () {
                 if (ctrl.map == null || ctrl.unitsSettings == null)
                     return;
@@ -53,6 +80,14 @@
                     comboBox.appendChild(o);
                 }
 
+                comboBox.onchange = function (e) {
+                    ctrl.preferredExitAltitude = comboBox.value;
+                    settingsService.savePreferredExitAltitude(ctrl.preferredExitAltitude);
+                    drawSpot();
+                }
+
+                comboBox.value = ctrl.preferredExitAltitude;
+
                 ctrl.map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
             }
 
@@ -87,33 +122,6 @@
                     }],
                     map: ctrl.map
                 });
-            }
-
-            var drawSpot = function() {
-                if (ctrl.map == null)
-                    return;
-                if (ctrl.spotCircle != null)
-                    ctrl.spotCircle.setMap(null);
-                if (ctrl.locationInfo == null)
-                    return;
-
-                var latLng = new google.maps.LatLng(ctrl.locationInfo.latitude, ctrl.locationInfo.longitude);
-                var spotInformation = spottingService.getSpotInformation(ctrl.weather, latLng, 3000);
-                if (spotInformation == null)
-                    return;
-
-                var circleOptions = {
-                    strokeColor: "#000000",
-                    strokeOpacity: 0.25,
-                    strokeWeight: 2,
-                    fillColor: "#ffff00",
-                    fillOpacity: 0.25,
-                    map: ctrl.map,
-                    center: spotInformation.spotCenter,
-                    radius: 200
-                };
-
-                ctrl.spotCircle = new google.maps.Circle(circleOptions);
             }
 
             var setMarker = function (latLng) {
@@ -177,6 +185,8 @@
             }
 
             this.$onInit = function () {
+                ctrl.preferredExitAltitude = settingsService.loadPreferredExitAltitude();
+
                 initMaps();
             };
 
