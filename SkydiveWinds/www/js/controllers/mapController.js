@@ -1,5 +1,5 @@
 ﻿angular.module('starter.controllers')
-    .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService, unitsService, spottingService) {
+    .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService, $ionicSideMenuDelegate) {
         $scope.weatherService = weatherService;
 
         $scope.loadWeather = function (force) {
@@ -31,8 +31,7 @@
         
         $scope.loadLocationInfo = function() {
             $scope.locationInfo = settingsService.loadLocationInfo();
-            $scope.spot = new google.maps.LatLng($scope.locationInfo.latitude, $scope.locationInfo.longitude);
-
+            
             if ($scope.locationInfo == null) {
                 $scope.locationPresent = false;
                 $scope.dropzoneName = null;
@@ -55,4 +54,11 @@
         $scope.gotoLocationSettings = function () {
             $state.transitionTo('app.location');
         }
+
+        $scope.$on('$ionicView.enter', function () {
+            $ionicSideMenuDelegate.canDragContent(false);
+        });
+        $scope.$on('$ionicView.leave', function () {
+            $ionicSideMenuDelegate.canDragContent(true);
+        });
     });

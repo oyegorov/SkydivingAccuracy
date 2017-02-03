@@ -3,9 +3,9 @@
         template: '<div id="map" class="map" data-tap-disabled="true" ng-show="$ctrl.locationInfo">',
         bindings: {
             locationInfo: '<',
-            spot: '<',
             weather: '<',
-            unitsSettings: '<'
+            unitsSettings: '<',
+            onMarkerMoved: '&'
         },
 
         controller: function (unitsService, spottingService) {
@@ -97,7 +97,9 @@
                 if (ctrl.locationInfo == null)
                     return;
 
-                if (ctrl.spot == null)
+                var latLng = new google.maps.LatLng(ctrl.locationInfo.latitude, ctrl.locationInfo.longitude);
+                var spotInformation = spottingService.getSpotInformation(ctrl.weather, latLng, 3000);
+                if (spotInformation == null)
                     return;
 
                 var circleOptions = {
@@ -107,7 +109,7 @@
                     fillColor: "#ffff00",
                     fillOpacity: 0.25,
                     map: ctrl.map,
-                    center: ctrl.spot,
+                    center: spotInformation.spotCenter,
                     radius: 200
                 };
 
@@ -131,6 +133,9 @@
                     ctrl.locationInfo.longitude = this.position.lng();
                     drawSpot();
                     drawLandingArrow();
+
+                    if (ctrl.onMarkerMoved != null)
+                        ctrl.onMarkerMoved();
                 });
 
                 drawSpot();

@@ -18,6 +18,9 @@
             },
 
             getSpotInformation: function (weather, latLng, exitAltitude) {
+                if (weather == null || latLng == null || exitAltitude == null)
+                    return null;
+
                 var w = weather.windsAloftRecords;
                 if (w == null || w.length == 0)
                     return null;
