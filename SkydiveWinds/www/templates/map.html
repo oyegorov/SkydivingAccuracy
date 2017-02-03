@@ -3,14 +3,14 @@
         <button class="button" ng-click="gotoLocationSettings();" style="margin-left: 10px">
             <i class="icon ion-flag"></i>
         </button>
-        <button class="button" ng-click="initializeMaps();" style="margin-left: 10px">
+        <button class="button" ng-click="loadLocationInfo();" style="margin-left: 10px">
             <i class="icon ion-disc"></i>
         </button>
     </ion-nav-buttons>
 
     <ion-content scroll="false">
         <div ng-show="locationPresent" class="map">
-            <div id="map" class="map" data-tap-disabled="true"></div>
+            <dropzone-map location-info="locationInfo" units-settings="unitsSettings" weather="weather" spot="spot"></dropzone-map>
         </div>
 
         <div class="list" ng-hide="locationPresent">

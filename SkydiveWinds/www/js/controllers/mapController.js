@@ -1,141 +1,5 @@
 ﻿angular.module('starter.controllers')
     .controller('MapController', function ($scope, $state, $ionicLoading, settingsService, weatherService, unitsService, spottingService) {
-        var landingArrow;
-        var spotCircle;
-
-        var drawLandingArrow = function () {
-            if ($scope.map == null)
-                return;
-
-            if (landingArrow != null)
-                landingArrow.setMap(null);
-
-            var locationInfo = settingsService.loadLocationInfo();
-            if (locationInfo == null)
-                return;
-            var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
-            
-            if (weatherService.weather.groundWeather == null || weatherService.weather.groundWeather.windHeading == null)
-                return;
-
-            var lineSymbol = {
-                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
-            };
-
-            var windSpeedMs = unitsService.convertWindSpeed(weatherService.weather.groundWeather.windSpeed,
-                unitsService.WS_MPS);
-            var forwardSpeed = 15 - windSpeedMs > 0 ? 15 - windSpeedMs : 1;
-            var finalLegLength = 20 * forwardSpeed;
-
-            landingArrow = new google.maps.Polyline({
-                strokeColor: "#FFFF00",
-                path: [spottingService.offsetCoordinatesBy(latLng, finalLegLength, 180 + weatherService.weather.groundWeather.windHeading), latLng],
-                icons: [{
-                    icon: lineSymbol,
-                    offset: '100%'
-                }],
-                map: $scope.map
-            });
-        }
-
-        var createExitAltitudeCombobox = function() {
-            if ($scope.map == null)
-                return;
-
-            $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].clear();
-
-            if (weatherService.weather.windsAloftRecords == null || weatherService.weather.windsAloftRecords.length == 0)
-                return;
-
-            var altitudes = [];
-            for (var i = 0; i < weatherService.weather.windsAloftRecords.length; i++) {
-                var w = weatherService.weather.windsAloftRecords[i];
-                altitudes.push(unitsService.convertAltitude(w.altitude, $scope.unitsSettings.altitudeUnits));
-            }
-            
-            var controlDiv = document.createElement('div');
-
-            var controlUI = document.createElement('div');
-            controlUI.style.backgroundColor = '#fff';
-            controlUI.style.border = '2px solid #fff';
-            controlUI.style.cursor = 'pointer';
-            controlUI.style.margin = '10px';
-            controlUI.style.padding = '2px';
-            controlDiv.appendChild(controlUI);
-
-            var exitAltitudeSpan = document.createElement('span');
-            exitAltitudeSpan.innerHTML = 'Exit at: ';
-            controlUI.appendChild(exitAltitudeSpan);
-
-            var comboBox = document.createElement('select');
-            comboBox.style.paddingLeft = '5px';
-            comboBox.style.paddingRight = '5px';
-            controlUI.appendChild(comboBox);
-
-            for (var i = 0; i < altitudes.length; i++) {
-                var o = document.createElement("option");
-                var t = document.createTextNode(altitudes[i]);
-                o.setAttribute("value", altitudes[i]);
-                o.appendChild(t);
-                comboBox.appendChild(o);
-            }
-
-            $scope.map.controls[google.maps.ControlPosition.TOP_CENTER].push(controlDiv);
-        }
-
-        var drawSpot = function() {
-            if ($scope.map == null)
-                return;
-            if (spotCircle != null)
-                spotCircle.setMap(null);
-            
-            var locationInfo = settingsService.loadLocationInfo();
-            if (locationInfo == null)
-                return;
-
-            var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
-            var spot = spottingService.getSpotInformation(weatherService.weather, latLng, 9000).spotCenter;
-            if (spot == null)
-                return;
-
-            var circleOptions = {
-                strokeColor: "#000000",
-                strokeOpacity: 0.25,
-                strokeWeight: 2,
-                fillColor: "#ffff00",
-                fillOpacity: 0.25,
-                map: $scope.map,
-                center: spot,
-                radius: 200
-            };
-
-            spotCircle = new google.maps.Circle(circleOptions);
-        }
-
-        var setMarker = function (latLng) {
-            if ($scope.marker != null) {
-                $scope.marker.setPosition(latLng);
-                drawSpot();
-                return;
-            }
-
-            $scope.marker = new google.maps.Marker({
-                position: latLng,
-                map: $scope.map,
-                draggable: true
-            });
-            $scope.marker.addListener('dragend', function onDragEnd(e) {
-                var locationInfo = settingsService.loadLocationInfo();
-                locationInfo.latitude = e.latLng.lat();
-                locationInfo.longitude = e.latLng.lng();
-                settingsService.saveLocationInfo(locationInfo);
-
-                drawLandingArrow();
-            });
-            
-            drawSpot();
-        }
-
         $scope.weatherService = weatherService;
 
         $scope.loadWeather = function (force) {
@@ -157,64 +21,33 @@
                 },
                 function onEndLoading() {
                     $ionicLoading.hide();
-                    $scope.initializeMaps();
-                    createExitAltitudeCombobox();
-                    drawLandingArrow();
-                    drawSpot();
+                    $scope.weather = weatherService.weather;
                 },
                 function onLoadNotNeeded() {
-                    $scope.initializeMaps();
-                    createExitAltitudeCombobox();
-                    drawLandingArrow();
-                    drawSpot();
+                    $scope.weather = weatherService.weather;
                 }
             );
         }
+        
+        $scope.loadLocationInfo = function() {
+            $scope.locationInfo = settingsService.loadLocationInfo();
+            $scope.spot = new google.maps.LatLng($scope.locationInfo.latitude, $scope.locationInfo.longitude);
 
-        $scope.initializeMaps = function () {
-            var locationInfo = settingsService.loadLocationInfo();
-
-            if (locationInfo == null) {
+            if ($scope.locationInfo == null) {
                 $scope.locationPresent = false;
                 $scope.dropzoneName = null;
                 return;
             }
 
             $scope.locationPresent = true;
-            if (locationInfo.dropzoneName != null)
-                $scope.locationName = locationInfo.dropzoneName;
+            if ($scope.locationInfo.dropzoneName != null)
+                $scope.locationName = $scope.locationInfo.dropzoneName;
             else
-                $scope.locationName = '(' + locationInfo.latitude + '; ' + locationInfo.longitude + ')';
-
-            var latLng = new google.maps.LatLng(locationInfo.latitude, locationInfo.longitude);
-            if ($scope.map != null) {
-                $scope.map.panTo(latLng);
-                setMarker(latLng);
-                return;
-            }
-
-            var mapOptions = {
-                center: latLng,
-                zoom: 17,
-                mapTypeId: google.maps.MapTypeId.SATELLITE,
-                mapTypeControlOptions: {
-                    mapTypeIds: []
-                },
-                disableDefaultUI: true,
-                mapTypeControl: true,
-                scaleControl: true,
-                zoomControl: true,
-                zoomControlOptions: {
-                    style: google.maps.ZoomControlStyle.LARGE
-                }
-            };
-
-            $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-            setMarker(latLng);
+                $scope.locationName = '(' + $scope.locationInfo.latitude + '; ' + $scope.locationInfo.longitude + ')';
         }
 
         $scope.$on('$ionicView.beforeEnter', function () {
+            $scope.loadLocationInfo();
             $scope.unitsSettings = settingsService.loadUnitsSettings();
             $scope.loadWeather(false);
         });
